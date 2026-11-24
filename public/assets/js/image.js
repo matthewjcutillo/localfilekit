@@ -40,6 +40,25 @@ function encode(src, w, h, mime, quality) {
   return new Promise((res, rej) => c.toBlob((b) => (b ? res(b) : rej(new Error('Could not encode image'))), mime, quality));
 }
 
+// Find the best quality (and, if needed, a smaller size) that fits under maxBytes
+async function fitToSize(src, w, h, mime, maxBytes) {
+  let scale = 1, best = null;
+  for (let round = 0; round < 12; round++) {
+    const sw = Math.max(1, Math.round(w * scale)), sh = Math.max(1, Math.round(h * scale));
+    let lo = 0.05, hi = 0.95, fit = null;
+    for (let i = 0; i < 7; i++) {
+      const q = (lo + hi) / 2;
+      const b = await encode(src, sw, sh, mime, q);
+      if (b.size <= maxBytes) { fit = b; lo = q; } else hi = q;
+    }
+    if (!fit) { const b = await encode(src, sw, sh, mime, 0.05); if (b.size <= maxBytes) fit = b; }
+    if (fit) return fit;
+    best = await encode(src, sw, sh, mime, 0.05);
+    scale *= Math.max(0.5, Math.min(0.9, Math.sqrt(maxBytes / best.size)));
+  }
+  return best;
+}
+
 export function init(root) {
   const mode = root.dataset.mode;           // compress | convert | resize
   const preset = root.dataset.to || '';      // jpg | png | webp
@@ -58,9 +77,13 @@ export function init(root) {
   let format;
   if (mode === 'compress') {
     format = select('format', [['same', 'Same as original'], ['jpg', 'JPG'], ['webp', 'WebP']], preset || 'same');
-    const maxW = el('input', { type: 'number', min: 1, placeholder: 'Original', name: 'maxw' });
-    ui.opts.append(qField, field('Output format', format), field('Max width (px)', maxW));
-    root._maxW = maxW;
+    const maxW = el('input', { type: 'number', min: 1, placeholder: 'Original', name: 'maxw', value: root.dataset.maxw || '' });
+    const target = el('input', { type: 'number', min: 1, placeholder: 'Any', name: 'target', value: root.dataset.target || '' });
+    const tField = field('Target size (KB)', target);
+    const sync = () => (qField.style.display = target.value ? 'none' : '');
+    target.addEventListener('input', sync); sync();
+    ui.opts.append(tField, qField, field('Output format', format), field('Max width (px)', maxW));
+    root._maxW = maxW; root._target = target;
   } else if (mode === 'convert') {
     format = select('format', [['jpg', 'JPG'], ['png', 'PNG'], ['webp', 'WebP']], preset || 'jpg');
     ui.opts.append(field('Convert to', format), qField);
@@ -69,8 +92,8 @@ export function init(root) {
   } else {
     format = select('format', [['same', 'Same as original'], ['jpg', 'JPG'], ['png', 'PNG'], ['webp', 'WebP']], 'same');
     const by = select('by', [['px', 'Pixels'], ['pct', 'Percent']], 'px');
-    const w = el('input', { type: 'number', min: 1, placeholder: 'Auto', name: 'w' });
-    const h = el('input', { type: 'number', min: 1, placeholder: 'Auto', name: 'h' });
+    const w = el('input', { type: 'number', min: 1, placeholder: 'Auto', name: 'w', value: root.dataset.w || '' });
+    const h = el('input', { type: 'number', min: 1, placeholder: 'Auto', name: 'h', value: root.dataset.h || '' });
     const pct = el('input', { type: 'number', min: 1, max: 1000, value: 50, name: 'pct' });
     const wF = field('Width', w), hF = field('Height', h), pF = field('Percent', pct);
     const sync = () => { const px = by.value === 'px'; wF.style.display = hF.style.display = px ? '' : 'none'; pF.style.display = px ? 'none' : ''; };
@@ -137,6 +160,17 @@ export function init(root) {
         else if (th) { w = Math.round(w * (th / h)); h = th; }
       }
       w = Math.max(1, w); h = Math.max(1, h);
+    }
+    const targetKB = mode === 'compress' ? parseFloat(root._target.value) : 0;
+    if (targetKB > 0) {
+      if (file.size <= targetKB * 1024 && w === src.width) {
+        if (src.close) src.close();
+        return { blob: file, name: file.name };
+      }
+      if (mime === 'image/png') mime = 'image/jpeg';
+      const blob = await fitToSize(src, w, h, mime, targetKB * 1024);
+      if (src.close) src.close();
+      return { blob, name: baseName(file.name) + '-' + Math.round(targetKB) + 'kb.' + EXT[mime] };
     }
     let blob = await encode(src, w, h, mime, mime === 'image/png' ? undefined : q);
     let outMime = mime;

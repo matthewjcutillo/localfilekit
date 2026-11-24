@@ -3,6 +3,7 @@ const local = 'Your files never leave your device. Everything runs inside your b
 
 export const categories = [
   { id: 'image', name: 'Image tools' },
+  { id: 'size', name: 'Compress or resize to an exact size' },
   { id: 'av', name: 'Audio & video tools' },
   { id: 'pdf', name: 'PDF tools' },
 ];
@@ -24,6 +25,85 @@ const imgConvert = (from, to, F, T, extra) => ({
   ],
   related: ['image-converter', 'compress-image', 'resize-image'],
 });
+
+
+const kbLabel = (kb) => (kb >= 1000 ? `${kb / 1000} MB` : `${kb} KB`);
+const toSize = (kb, jpeg, why) => {
+  const L = kbLabel(kb), what = jpeg ? 'JPEG' : 'Image', thing = jpeg ? 'JPG photo' : 'image';
+  return {
+    slug: `compress-${jpeg ? 'jpeg' : 'image'}-to-${kb >= 1000 ? kb / 1000 + 'mb' : kb + 'kb'}`, cat: 'size', family: 'image', mode: 'compress', target: kb,
+    accept: jpeg ? 'image/jpeg,.jpg,.jpeg' : 'image/*', to: 'jpg',
+    name: `Compress ${what} to ${L}`, blurb: `Get any ${thing} under ${L}`,
+    title: `Compress ${what} to ${L} Online – Free, Exact Size, No Upload`,
+    desc: `Compress a ${thing} to ${L} or less in one step. The tool finds the best quality that fits under ${L}. Free, private, no upload, no sign-up.`,
+    h1: `Compress ${jpeg ? 'a JPEG' : 'an image'} to ${L}`,
+    lead: `Drop in a photo and get a copy under ${L}, with the best quality that still fits.`,
+    intro: `${why} Instead of guessing a quality setting, this tool tries different settings for you and keeps the sharpest version that comes in under ${L}. If a photo is very large, it also scales it down a little until it fits.`,
+    steps: [`Choose your ${jpeg ? 'JPG' : ''} photos or drop them in the box.`.replace('  ', ' '), `Leave the target at ${kb} KB, or type a different size.`, `Download each photo under ${L}, or all of them as a ZIP.`],
+    faq: [
+      [`Will the photo be exactly ${L}?`, `It will be ${L} or a little under. The tool picks the highest quality that still fits the limit.`],
+      [`Why did my image get smaller in pixels?`, `Some photos cannot reach ${L} by quality alone. Then the tool shrinks the width and height step by step until the file fits.`],
+      ['Can I do many photos at once?', 'Yes. Every photo you add is fitted to the same size, and you can download them together as a ZIP.'],
+      ['Are my photos uploaded?', local],
+    ],
+    related: ['compress-jpeg', 'compress-image', 'resize-image'],
+  };
+};
+const forSite = (slug, site, w, h, why, tip) => ({
+  slug, cat: 'size', family: 'image', mode: 'resize', w, h, accept: 'image/*',
+  name: `Resize for ${site}`, blurb: `${w}${h ? ' × ' + h : ' px wide'}`,
+  title: `Resize Image for ${site} – ${w}${h ? '×' + h : ' px'} Free, No Upload`,
+  desc: `Resize photos to the right size for ${site} (${w}${h ? ' × ' + h : ' px wide'}). Free, fast, works in your browser with no upload.`,
+  h1: `Resize an image for ${site}`,
+  lead: `The width${h ? ' and height are' : ' is'} already filled in for ${site}. Just add your photo.`,
+  intro: `${why} ${tip}`,
+  steps: ['Choose your image or drop it in the box.', `Keep the preset size of ${w}${h ? ' × ' + h : ' px wide'}, or change it.`, 'Download the resized image and upload it.'],
+  faq: [
+    [`What size is best for ${site}?`, why],
+    ['Will my photo be stretched?', h ? `Only if its shape differs from ${w} × ${h}. ${tip}` : 'No. Only the width is set, so the height follows the original shape.'],
+    ['Are my images uploaded?', local],
+  ],
+  related: ['resize-image', 'compress-image', 'compress-jpeg'],
+});
+
+const toAudio = (from, F, to, accept, about, use) => {
+  const T = to.toUpperCase(), isVid = /video/.test(accept);
+  return {
+    slug: `${from}-to-${to}`, cat: 'av', family: 'audio', to, accept,
+    name: `${F} to ${T}`, blurb: isVid ? `Pull the audio out of ${F} files` : `Convert ${F} audio to ${T}`,
+    title: `${F} to ${T} Converter – Free, Private, No Upload`,
+    desc: `Convert ${F} to ${T} free in your browser. ${to === 'mp3' ? 'Choose 128 to 320 kbps.' : 'Uncompressed WAV for editing.'} No upload, no sign-up, no watermark.`,
+    h1: `Convert ${F} to ${T}`,
+    lead: `Turn ${F} files into ${T} audio in a few seconds, right on your device.`,
+    intro: `${about} ${use}`,
+    steps: [`Choose your ${F} files or drop them in the box.`, to === 'mp3' ? 'Pick MP3 quality. 192 kbps suits most uses; 320 kbps for music.' : 'Leave WAV selected.', 'Wait while the audio is converted.', `Download your ${T} file.`],
+    faq: [
+      [to === 'mp3' ? 'What MP3 quality should I choose?' : 'Why choose WAV?', to === 'mp3' ? '128 kbps is fine for speech, 192 kbps for most music and 320 kbps for the best quality.' : 'WAV is uncompressed, so it is the safest format for editing in Audacity, GarageBand or any DAW. Files are about 10 MB per minute.'],
+      [`Can I convert several ${F} files at once?`, 'Yes. Add as many as you like and they are converted one after another.'],
+      ['Are my files uploaded?', local],
+    ],
+    related: [to === 'mp3' ? 'video-to-mp3' : 'wav-to-mp3', 'mp4-to-mp3', 'compress-video'],
+  };
+};
+const toVideo = (from, F, to, accept, about) => {
+  const T = to.toUpperCase();
+  return {
+    slug: `${from}-to-${to}`, cat: 'av', family: 'video', mode: 'convert', to, accept,
+    name: `${F} to ${T}`, blurb: `Convert ${F} videos to ${T}`,
+    title: `${F} to ${T} Converter – Free, No Upload, No Watermark`,
+    desc: `Convert ${F} to ${T} free in your browser. No upload, no watermark, no sign-up. Works on Windows, Mac and Chromebook.`,
+    h1: `Convert ${F} to ${T}`,
+    lead: `Turn ${F} videos into ${T} files that play where you need them.`,
+    intro: `${about} ${to === 'mp4' ? 'MP4 with H.264 plays on nearly every phone, computer, TV and website.' : to === 'webm' ? 'WebM is an open format made for the web and plays in every modern browser.' : 'MOV is Apple’s video format and opens cleanly in QuickTime, iMovie and Final Cut.'}`,
+    steps: [`Choose your ${F} video or drop it in the box.`, `Leave "${to === 'mp4' ? 'MP4 (H.264)' : to === 'webm' ? 'WebM (VP8)' : 'MOV'}" selected.`, 'Keep the tab open while it converts.', `Download your ${T}.`],
+    faq: [
+      [`Does ${F} to ${T} lower the quality?`, 'The video is re-encoded at a high quality setting, so the difference is hard to see.'],
+      ['How long does it take?', 'About as long as the video itself on a typical laptop. Short clips are quick; long videos are faster on a computer than a phone.'],
+      ['Are my videos uploaded?', local],
+    ],
+    related: ['video-converter', 'compress-video', 'video-to-mp3'],
+  };
+};
 
 export const tools = [
   // ---------- Image ----------
@@ -314,4 +394,107 @@ export const tools = [
     ],
     related: ['merge-pdf', 'split-pdf', 'jpg-to-pdf'],
   },
+  // ---------- More formats ----------
+  imgConvert('bmp', 'png', 'BMP', 'PNG', 'BMP files are uncompressed and very large. PNG keeps every pixel but is usually a fraction of the size.'),
+  imgConvert('bmp', 'jpg', 'BMP', 'JPG', 'BMP files from old scanners and Windows Paint are huge. JPG makes them small enough to email or upload.'),
+  imgConvert('gif', 'png', 'GIF', 'PNG', 'This saves the first frame of a GIF as a PNG still image, with full color instead of GIF’s 256 colors.'),
+  imgConvert('gif', 'jpg', 'GIF', 'JPG', 'This saves the first frame of a GIF as a JPG still, handy for thumbnails and previews.'),
+  imgConvert('svg', 'png', 'SVG', 'PNG', 'SVG logos and icons do not open everywhere. A PNG works in documents, slides and social posts and keeps transparency.'),
+  imgConvert('svg', 'jpg', 'SVG', 'JPG', 'Turn an SVG logo or drawing into a JPG that any app can open. Transparent areas become white.'),
+  imgConvert('avif', 'jpg', 'AVIF', 'JPG', 'AVIF is a new, very small image format that many apps and older devices still cannot open. JPG works everywhere.'),
+  imgConvert('avif', 'png', 'AVIF', 'PNG', 'AVIF images often will not open in editors or older software. PNG is accepted everywhere and keeps transparency.'),
+  toAudio('mov', 'MOV', 'mp3', 'video/quicktime,.mov', 'MOV is the video format iPhones and Macs record in.', 'Pull the sound out of an iPhone video, rehearsal or interview as an MP3.'),
+  toAudio('webm', 'WebM', 'mp3', 'video/webm,audio/webm,.webm', 'WebM files come from screen recorders, browsers and some download tools.', 'Save the audio track as an MP3 for your phone or podcast app.'),
+  toAudio('mkv', 'MKV', 'mp3', '.mkv,video/x-matroska', 'MKV is a container used by many cameras and recording apps.', 'Extract the soundtrack from your own MKV file as an MP3.'),
+  toAudio('avi', 'AVI', 'mp3', '.avi,video/x-msvideo', 'AVI is an older Windows video format.', 'Save the audio from old home videos or recordings as MP3.'),
+  toAudio('ogg', 'OGG', 'mp3', 'audio/ogg,.ogg,.oga', 'OGG Vorbis is an open audio format that many car stereos and Apple devices do not play.', 'MP3 plays on everything.'),
+  toAudio('flac', 'FLAC', 'mp3', 'audio/flac,.flac', 'FLAC is lossless and large, about 30 MB per song.', 'MP3 at 320 kbps sounds nearly the same at a quarter of the size, so more songs fit on a phone or USB stick.'),
+  toAudio('aac', 'AAC', 'mp3', 'audio/aac,.aac', 'AAC is used by iTunes, YouTube and many phones.', 'Some older players and apps only accept MP3.'),
+  toAudio('mp4', 'MP4', 'wav', 'video/mp4,.mp4,.m4v', 'Need the audio from a video for editing?', 'WAV is uncompressed, so it is the safest format to bring into Audacity, GarageBand or a DAW.'),
+  toAudio('mp3', 'MP3', 'wav', 'audio/mpeg,.mp3', 'Some editors, samplers and phone systems only accept WAV.', 'Converting MP3 to WAV makes the file compatible, though it cannot add back detail MP3 removed.'),
+  toAudio('m4a', 'M4A', 'wav', 'audio/*,.m4a', 'M4A is the format of iPhone voice memos and iTunes downloads.', 'WAV opens in every audio editor.'),
+  toVideo('webm', 'WebM', 'mp4', 'video/webm,.webm', 'WebM screen recordings and browser downloads will not play on many phones, TVs or in PowerPoint.'),
+  toVideo('mkv', 'MKV', 'mp4', '.mkv,video/x-matroska', 'MKV files often will not play on iPhones, smart TVs or in video editors.'),
+  toVideo('avi', 'AVI', 'mp4', '.avi,video/x-msvideo', 'AVI is an old, bulky format that phones and websites do not support well.'),
+  toVideo('flv', 'FLV', 'mp4', '.flv,video/x-flv', 'FLV is an old Flash video format that modern devices cannot play.'),
+  toVideo('mp4', 'MP4', 'webm', 'video/mp4,.mp4', 'Building a website?'),
+  toVideo('mp4', 'MP4', 'mov', 'video/mp4,.mp4', 'Editing on a Mac?'),
+  {
+    slug: 'mp4-to-gif', cat: 'av', family: 'video', mode: 'gif', accept: 'video/mp4,.mp4,.m4v',
+    name: 'MP4 to GIF', blurb: 'Make a GIF from an MP4 clip',
+    title: 'MP4 to GIF Converter – Make GIFs from Video Free, No Upload',
+    desc: 'Turn an MP4 clip into an animated GIF free. Pick the start time, length, size and frame rate. Private, no upload, no watermark.',
+    h1: 'Convert MP4 to GIF',
+    lead: 'Cut a few seconds from an MP4 and save it as a looping GIF.',
+    intro: 'GIFs play automatically in chats, emails and documents where video does not. Keep them short, 2 to 6 seconds, and around 480 px wide so they stay small enough to share.',
+    steps: ['Choose your MP4 or drop it in the box.', 'Set the start time and length in seconds.', 'Pick a width and frame rate. 480 px at 12 fps is a good default.', 'Download your GIF.'],
+    faq: [
+      ['Why is my GIF so large?', 'GIF is an old format with poor compression. A shorter clip, smaller width or lower frame rate makes it much smaller.'],
+      ['How long can the GIF be?', 'Up to 60 seconds, but under 6 seconds keeps the file a sensible size.'],
+      ['Are my videos uploaded?', local],
+    ],
+    related: ['video-to-gif', 'compress-video', 'mov-to-mp4'],
+  },
+  {
+    slug: 'png-to-pdf', cat: 'pdf', family: 'pdf', mode: 'images', accept: 'image/png,.png,image/*',
+    name: 'PNG to PDF', blurb: 'Turn screenshots into a PDF',
+    title: 'PNG to PDF Converter – Screenshots & Images to PDF Free',
+    desc: 'Convert PNG images and screenshots to PDF free. Combine many into one PDF, choose A4 or Letter. Private, no upload.',
+    h1: 'Convert PNG to PDF',
+    lead: 'Combine screenshots and PNG images into a single PDF.',
+    intro: 'Useful for sending a set of screenshots, a chat history or design mockups as one document that opens anywhere.',
+    steps: ['Choose your PNG files or drop them in the box.', 'Use the arrows to set the page order.', 'Pick a page size and margin.', 'Click "Create PDF" to download it.'],
+    faq: [
+      ['Is PNG quality kept in the PDF?', 'Yes. PNG images are placed in the PDF without recompression.'],
+      ['Can I mix PNG and JPG?', 'Yes. Any mix of PNG, JPG, WebP, GIF and BMP works.'],
+      ['Are my images uploaded?', local],
+    ],
+    related: ['jpg-to-pdf', 'merge-pdf', 'pdf-to-png'],
+  },
+  {
+    slug: 'pdf-to-png', cat: 'pdf', family: 'pdf', mode: 'toimg', to: 'png',
+    name: 'PDF to PNG', blurb: 'Save PDF pages as sharp PNGs',
+    title: 'PDF to PNG Converter – PDF Pages to PNG Images Free',
+    desc: 'Convert PDF pages to PNG images free. Sharp text, transparent-free and lossless. Works in your browser with no upload.',
+    h1: 'Convert PDF to PNG',
+    lead: 'Save each page of a PDF as a crisp PNG image.',
+    intro: 'PNG keeps text and line art sharp with no blurry edges, which makes it the better choice than JPG for slides, charts, diagrams and documents.',
+    steps: ['Choose a PDF or drop it in the box.', 'Leave PNG selected and pick the quality.', 'Download the image, or all pages as a ZIP.'],
+    faq: [
+      ['PNG or JPG for PDF pages?', 'PNG for text, charts and diagrams. JPG for photo-heavy pages where a smaller file matters more.'],
+      ['Can I convert just one page?', 'Convert the PDF and keep the page you need, or use Split PDF first.'],
+      ['Are my PDFs uploaded?', local],
+    ],
+    related: ['pdf-to-jpg', 'split-pdf', 'png-to-pdf'],
+  },
+  // ---------- Exact sizes ----------
+  toSize(20, false, 'Some government and exam forms only accept photos and signatures under 20 KB.'),
+  toSize(50, false, 'Job portals, exam forms and ID applications often ask for images under 50 KB.'),
+  toSize(100, false, 'Many online forms, profile pages and email systems cap image uploads at 100 KB.'),
+  toSize(200, false, 'Application forms and websites often limit photos to 200 KB.'),
+  toSize(500, false, 'A 500 KB limit is common on forums, school portals and listing sites.'),
+  toSize(1000, false, 'Many sites and email services cap attachments around 1 MB per image.'),
+  toSize(100, true, 'Phone JPEGs are usually 2–5 MB, far over the 100 KB many forms allow.'),
+  toSize(200, true, 'Phone JPEGs are usually 2–5 MB, far over the 200 KB many forms allow.'),
+  {
+    slug: 'compress-photo-for-email', cat: 'size', family: 'image', mode: 'compress', maxw: 1600, to: 'jpg', accept: 'image/*',
+    name: 'Compress Photos for Email', blurb: 'Make photos small enough to attach',
+    title: 'Compress Photos for Email – Shrink Pictures to Attach, Free',
+    desc: 'Make phone photos small enough to email. Shrinks pictures to about 1600 px and a fraction of the size, so more fit in one message. Free, no upload.',
+    h1: 'Compress photos for email',
+    lead: 'Shrink a batch of phone photos so they attach and send without hitting size limits.',
+    intro: 'Gmail and Outlook stop attachments at about 20–25 MB per email, which is only a handful of phone photos. Scaling each picture to 1600 px wide still looks sharp on any screen and usually cuts each file to 300–600 KB, so you can send far more in one email.',
+    steps: ['Choose your photos or drop them in the box.', 'Keep the max width at 1600 px and quality at 75%.', 'Download them all as a ZIP, or one by one, and attach them to your email.'],
+    faq: [
+      ['How many photos can I email after compressing?', 'At about 400 KB each, roughly 40–50 photos fit under a 20 MB email limit.'],
+      ['Will the photos still look good?', 'Yes. 1600 px wide fills a laptop screen, and 75% quality is hard to tell from the original.'],
+      ['Can I set an exact size instead?', 'Yes. Type a number in Target size (KB), for example 500, and each photo will fit under it.'],
+      ['Are my photos uploaded?', local],
+    ],
+    related: ['compress-jpeg', 'compress-image-to-500kb', 'resize-image'],
+  },
+  forSite('resize-image-for-instagram', 'Instagram', 1080, 0, 'Instagram shows posts at 1080 px wide. Square posts are 1080 × 1080, portrait posts 1080 × 1350.', 'Setting only the width keeps your photo’s shape, so nothing is stretched.'),
+  forSite('resize-image-for-youtube-thumbnail', 'a YouTube thumbnail', 1280, 720, 'YouTube recommends thumbnails of 1280 × 720 pixels (16:9) and under 2 MB.', 'Start from a widescreen 16:9 image so it is not stretched.'),
+  forSite('resize-image-for-facebook-cover', 'a Facebook cover photo', 851, 315, 'Facebook cover photos display at 851 × 315 pixels on computers.', 'Pick a wide image, or clear the height to keep its shape.'),
+  forSite('resize-image-for-twitter-header', 'an X (Twitter) header', 1500, 500, 'X (Twitter) header images are 1500 × 500 pixels.', 'Use a wide 3:1 image, or clear the height to keep its shape.'),
 ];

@@ -82,7 +82,7 @@ function toolPage(t) {
   const cat = categories.find((c) => c.id === t.cat);
   const related = t.related.map((s) => bySlug[s]).filter(Boolean);
   const more = tools.filter((x) => x.cat === t.cat && x.slug !== t.slug && !t.related.includes(x.slug)).slice(0, 6);
-  const data = [`data-family="${t.family}"`, t.mode && `data-mode="${t.mode}"`, t.to && `data-to="${t.to}"`, t.accept && `data-accept="${esc(t.accept)}"`].filter(Boolean).join(' ');
+  const data = [`data-family="${t.family}"`, t.mode && `data-mode="${t.mode}"`, t.to && `data-to="${t.to}"`, t.accept && `data-accept="${esc(t.accept)}"`, t.target && `data-target="${t.target}"`, t.maxw && `data-maxw="${t.maxw}"`, t.w && `data-w="${t.w}"`, t.h && `data-h="${t.h}"`].filter(Boolean).join(' ');
   const body = `
 <p class="crumbs"><a href="/">Home</a> › <a href="/#${cat.id}">${esc(cat.name)}</a> › ${esc(t.name)}</p>
 <h1>${esc(t.h1)}</h1>
