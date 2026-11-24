@@ -1,0 +1,6 @@
+pdf-lib 1.17.1 MIT
+@breezystack/lamejs 1.2.7 LGPL-3.0
+jszip 3.10.2 (MIT OR GPL-3.0-or-later)
+@ffmpeg/ffmpeg 0.12.15 MIT
+@ffmpeg/core 0.12.10 GPL-2.0-or-later
+pdfjs-dist 4.10.38 Apache-2.0
