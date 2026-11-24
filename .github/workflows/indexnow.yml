@@ -1,0 +1,18 @@
+name: Ping search engines (IndexNow)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the Vercel deploy
+        run: sleep 120
+      - name: Submit every sitemap URL to IndexNow (Bing, Yandex and others)
+        run: |
+          SITE=https://www.getlocalfilekit.com
+          KEY=bf76c98ee4a687559b8168f39892a799
+          URLS=$(curl -fsSL "$SITE/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | sed 's/<[^>]*>//g' | jq -R . | jq -sc .)
+          BODY=$(jq -nc --arg h "${SITE#https://}" --arg k "$KEY" --arg kl "$SITE/$KEY.txt" --argjson u "$URLS" '{host:$h,key:$k,keyLocation:$kl,urlList:$u}')
+          curl -sS -w "\nHTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow -H "Content-Type: application/json; charset=utf-8" --data "$BODY"
