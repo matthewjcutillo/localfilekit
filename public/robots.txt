@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://localfilekit.vercel.app/sitemap.xml
+Sitemap: https://www.getlocalfilekit.com/sitemap.xml
