@@ -1,0 +1,46 @@
+{
+ "name": "LocalFileKit: free file tools",
+ "short_name": "LocalFileKit",
+ "description": "Free file tools that run in your browser. No upload.",
+ "start_url": "/?source=app",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#f7f8fa",
+ "theme_color": "#1f6feb",
+ "icons": [
+  {
+   "src": "/favicon.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Compress JPEG",
+   "url": "/compress-jpeg/"
+  },
+  {
+   "name": "MP4 to MP3",
+   "url": "/mp4-to-mp3/"
+  },
+  {
+   "name": "Merge PDF",
+   "url": "/merge-pdf/"
+  },
+  {
+   "name": "Compress Image to 100 KB",
+   "url": "/compress-image-to-100kb/"
+  }
+ ]
+}

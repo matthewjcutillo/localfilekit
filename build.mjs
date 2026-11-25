@@ -50,6 +50,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/favicon.png">
+<link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/assets/style.css">
 ${cfg.googleSiteVerification ? `<meta name="google-site-verification" content="${esc(cfg.googleSiteVerification)}">` : ''}
 ${adsOn ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(cfg.adsenseClient)}" crossorigin="anonymous"></script>` : ''}
@@ -58,7 +59,7 @@ ${schema.map(ld).join('\n')}
 <body>
 <header class="site"><div class="wrap">
 <a class="logo" href="/">${LOGO}<span>${esc(NAME)}</span></a>
-<nav class="top" aria-label="Tool categories"><a href="/#image">Image</a><a href="/#av">Audio &amp; Video</a><a href="/#pdf">PDF</a></nav>
+<nav class="top" aria-label="Tool categories"><a href="/#image">Image</a><a href="/#av">Audio &amp; Video</a><a href="/#pdf">PDF</a><a href="/#size">Exact sizes</a></nav>
 </div></header>
 <main><div class="wrap">
 ${body}
@@ -73,7 +74,7 @@ ${body}
 `;
 }
 
-const tile = (t) => `<a class="tile" href="/${t.slug}/"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></a>`;
+const tile = (t) => `<a class="tile" href="/${t.slug}/" data-k="${esc((t.name + ' ' + t.blurb + ' ' + t.slug.replace(/-/g, ' ')).toLowerCase())}"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></a>`;
 const faqHtml = (faq) => faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n');
 const faqSchema = (faq) => ({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
 const crumbs = (items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: SITE + p })) });
@@ -119,10 +120,13 @@ function homePage() {
     ['Can I download YouTube videos here?', 'No. These tools work with files you already have on your device.'],
   ];
   const body = `
+<div class="hero">
 <h1>Free file tools that run in your browser</h1>
 <p class="lead">Compress and convert images, pull audio from video, and merge or split PDFs. No upload, no sign-up, no watermark.</p>
-<div class="badge">🔒 Your files never leave your device</div>
-${categories.map((c) => `<h2 id="${c.id}">${esc(c.name)}</h2>\n<div class="grid">${tools.filter((t) => t.cat === c.id).map(tile).join('')}</div>`).join('\n')}
+<div class="promise"><span class="lock">🔒</span><div><b>Your files never leave your device.</b><span>Every tool works right here in your browser. Nothing is uploaded, so your photos, videos and documents stay private, and big files are done in seconds.</span></div></div>
+<div class="search"><input id="q" type="search" placeholder="Search ${tools.length} tools: try “mp4 to mp3” or “100 kb”" aria-label="Search tools" autocomplete="off"><p id="qnone" hidden>No tool matches that yet. Try another word, like “compress” or “pdf”.</p></div>
+</div>
+${categories.map((c) => `<section class="cat"><h2 id="${c.id}">${esc(c.name)}</h2>\n<div class="grid">${tools.filter((t) => t.cat === c.id).map(tile).join('')}</div></section>`).join('\n')}
 ${adSlot('top')}
 <div class="prose">
 <h2>Why use ${esc(NAME)}?</h2>
@@ -222,5 +226,6 @@ const urls = ['/', ...tools.map((t) => `/${t.slug}/`), ...Object.keys(pages).map
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 if (adsOn) write('ads.txt', `google.com, ${cfg.adsenseClient.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`);
+write('manifest.webmanifest', JSON.stringify({ name: `${NAME}: free file tools`, short_name: NAME, description: cfg.tagline, start_url: '/?source=app', scope: '/', display: 'standalone', background_color: '#f7f8fa', theme_color: '#1f6feb', icons: [{ src: '/favicon.png', sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }], shortcuts: ['compress-jpeg', 'mp4-to-mp3', 'merge-pdf', 'compress-image-to-100kb'].map((s) => ({ name: bySlug[s].name, url: `/${s}/` })) }, null, 1));
 write('favicon.svg', LOGO.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" '));
 console.log(`Built ${urls.length} pages into public/ for ${SITE}`);

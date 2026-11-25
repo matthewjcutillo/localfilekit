@@ -26,7 +26,8 @@ export function el(tag, attrs = {}, ...kids) {
 // Builds the standard tool frame: drop zone, options area, actions, progress, results.
 export function frame(root, { accept, multiple = true, label, hint }) {
   const input = el('input', { type: 'file', accept, multiple });
-  const drop = el('label', { class: 'drop' }, el('strong', {}, label), el('small', {}, hint), input);
+  const pasteHint = /image/.test(accept || '') ? ' Or paste an image with Ctrl+V.' : '';
+  const drop = el('label', { class: 'drop' }, el('strong', {}, label), el('small', {}, hint + pasteHint), input);
   const opts = el('div', { class: 'opts' });
   const actions = el('div', { class: 'actions' });
   const bar = el('span');
@@ -41,6 +42,12 @@ export function frame(root, { accept, multiple = true, label, hint }) {
   ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
   drop.addEventListener('drop', (e) => emit([...e.dataTransfer.files].slice(0, multiple ? 500 : 1)));
+  // Paste files straight from the clipboard (screenshots, copied images)
+  document.addEventListener('paste', (e) => {
+    if (e.target.closest && e.target.closest('input,textarea,[contenteditable]')) return;
+    const files = [...(e.clipboardData?.files || [])].map((f, i) => (f.name && f.name !== 'image.png' ? f : new File([f], `pasted-${Date.now()}-${i}.${(f.type.split('/')[1] || 'png').replace('jpeg', 'jpg')}`, { type: f.type })));
+    if (files.length) { e.preventDefault(); emit(files.slice(0, multiple ? 500 : 1)); }
+  });
 
   return {
     opts, actions, list,
