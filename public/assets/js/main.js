@@ -33,7 +33,7 @@ if (q) {
   const tiles = [...document.querySelectorAll('.tile[data-k]')];
   const none = document.getElementById('qnone');
   const run = () => {
-    const words = q.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(Boolean);
+    const words = q.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N} ]+/gu, ' ').split(/\s+/).filter(Boolean);
     let shown = 0;
     for (const t of tiles) { const ok = words.every((w) => t.dataset.k.includes(w)); t.hidden = !ok; if (ok) shown++; }
     document.querySelectorAll('section.cat').forEach((s) => (s.hidden = !s.querySelector('.tile:not([hidden])')));
