@@ -1,0 +1,612 @@
+// Brazilian Portuguese (pt-BR) version of every page. Written by hand for natural, everyday Portuguese.
+const local = 'Seus arquivos nunca saem do seu dispositivo. Tudo funciona dentro do navegador: nada é enviado, não há fila de espera e nada fica guardado em um servidor.';
+
+export const ui = {
+  lang: 'pt', locale: 'pt_BR', prefix: '/pt',
+  langName: 'Português',
+  home: 'Início',
+  nav: { image: 'Imagem', av: 'Áudio e vídeo', pdf: 'PDF', size: 'Tamanhos exatos' },
+  cats: {
+    image: 'Ferramentas de imagem',
+    size: 'Comprimir ou redimensionar para um tamanho exato',
+    av: 'Ferramentas de áudio e vídeo',
+    pdf: 'Ferramentas de PDF',
+  },
+  badge: '🔒 Privado: seus arquivos não saem do seu dispositivo',
+  howTo: 'Como fazer',
+  freeH: 'Grátis, privado e sem cadastro',
+  freeP: (name) => `O ${name} funciona inteiramente no seu navegador. Seus arquivos são processados no seu próprio dispositivo e nunca vão para um servidor, então continuam privados: sem espera de upload, sem conta e sem marca d'água.`,
+  questions: 'Perguntas frequentes',
+  related: 'Ferramentas relacionadas',
+  noscript: 'Esta ferramenta precisa do JavaScript ativado.',
+  footer: 'Ferramentas grátis que funcionam no seu navegador. Seus arquivos nunca são enviados.',
+  footNav: { about: 'Sobre', privacy: 'Política de privacidade', terms: 'Termos de uso', contact: 'Contato' },
+  homeTitle: (name) => `${name} – Conversor e compressor de arquivos grátis, sem upload`,
+  homeDesc: 'Ferramentas online grátis para comprimir JPEG, converter imagens, converter MP4 para MP3, comprimir vídeos e juntar ou dividir PDFs. Privado: seus arquivos nunca saem do seu dispositivo.',
+  homeH1: 'Ferramentas de arquivo grátis que funcionam no seu navegador',
+  homeLead: "Comprima e converta imagens, extraia o áudio de vídeos e junte ou divida PDFs. Sem upload, sem cadastro e sem marca d'água.",
+  promiseB: 'Seus arquivos nunca saem do seu dispositivo.',
+  promiseP: 'Cada ferramenta funciona aqui mesmo, no seu navegador. Nada é enviado, então suas fotos, vídeos e documentos continuam privados, e arquivos grandes ficam prontos em segundos.',
+  searchPh: (n) => `Pesquise entre ${n} ferramentas: tente “mp4 para mp3” ou “100 kb”`,
+  searchNone: 'Ainda não há uma ferramenta com esse nome. Tente outra palavra, como “comprimir” ou “pdf”.',
+  whyH: (name) => `Por que usar o ${name}?`,
+  why: [
+    ['Privado:', 'os arquivos são processados no seu dispositivo e nunca são enviados.'],
+    ['Rápido:', 'sem espera de upload ou download, mesmo com muitas fotos de uma vez.'],
+    ['Grátis:', "sem conta, sem marca d'água e sem limite de uso."],
+    ['Funciona em qualquer lugar:', 'no celular, no tablet ou no computador, em qualquer navegador moderno.'],
+  ],
+  homeFaq: (name) => [
+    ['Essas ferramentas são mesmo grátis?', `Sim. Todas as ferramentas do ${name} são grátis, sem cadastro, sem marca d'água e sem limite diário. O site é mantido por anúncios.`],
+    ['Meus arquivos são enviados para algum servidor?', 'Não. Cada ferramenta funciona dentro do seu navegador, no seu próprio dispositivo. Seus arquivos nunca são enviados para um servidor.'],
+    ['As ferramentas funcionam no celular?', 'Sim. Elas funcionam em navegadores modernos no iPhone, Android, Windows, Mac e Chromebook.'],
+    ['Posso baixar vídeos do YouTube aqui?', 'Não. Estas ferramentas trabalham com arquivos que já estão no seu dispositivo.'],
+  ],
+  // Words shown by the tools themselves (buttons, labels, messages)
+  strings: {
+    'Download': 'Baixar',
+    'Download all (ZIP)': 'Baixar tudo (ZIP)',
+    'Choose images or drop them here': 'Escolha imagens ou arraste-as para cá',
+    'JPG, PNG, WebP and more. Batch is fine. Nothing is uploaded.': 'JPG, PNG, WebP e mais. Pode escolher várias. Nada é enviado.',
+    'Or paste an image with Ctrl+V.': 'Ou cole uma imagem com Ctrl+V.',
+    'Quality ': 'Qualidade ',
+    'Same as original': 'Igual ao original',
+    'Original': 'Original',
+    'Any': 'Qualquer',
+    'Target size (KB)': 'Tamanho desejado (KB)',
+    'Output format': 'Formato de saída',
+    'Max width (px)': 'Largura máxima (px)',
+    'Convert to': 'Converter para',
+    'Pixels': 'Pixels',
+    'Percent': 'Porcentagem',
+    'Auto': 'Auto',
+    'Width': 'Largura',
+    'Height': 'Altura',
+    'Resize by': 'Redimensionar por',
+    'Format': 'Formato',
+    'Working…': 'Processando…',
+    'Failed': 'Falhou',
+    'already small': 'já está pequeno',
+    'This browser cannot open this image type': 'Este navegador não consegue abrir este tipo de imagem',
+    'Could not encode image': 'Não foi possível salvar a imagem',
+    'Choose files or drop them here': 'Escolha arquivos ou arraste-os para cá',
+    'MP4, MOV, WebM, M4A, WAV and more. Nothing is uploaded.': 'MP4, MOV, WebM, M4A, WAV e mais. Nada é enviado.',
+    'MP3 quality': 'Qualidade do MP3',
+    'Output': 'Saída',
+    'Reading…': 'Lendo…',
+    'Done.': 'Pronto.',
+    'Loading converter (first time only)…': 'Carregando o conversor (só na primeira vez)…',
+    'Converting…': 'Convertendo…',
+    'No audio track found': 'Nenhuma faixa de áudio encontrada',
+    'Choose a video or drop it here': 'Escolha um vídeo ou arraste-o para cá',
+    'MP4, MOV, WebM, MKV, AVI and more. Works best under 500 MB. Nothing is uploaded.': 'MP4, MOV, WebM, MKV, AVI e mais. Funciona melhor com menos de 500 MB. Nada é enviado.',
+    'Light (best quality)': 'Leve (melhor qualidade)',
+    'Medium': 'Média',
+    'Strong (smallest)': 'Forte (menor arquivo)',
+    'Keep size': 'Manter tamanho',
+    'Compression': 'Compressão',
+    'Max resolution': 'Resolução máxima',
+    'Start (sec)': 'Início (s)',
+    'Length (sec)': 'Duração (s)',
+    'Frame rate': 'Taxa de quadros',
+    'Size': 'Tamanho',
+    'Loading converter (first time can take a moment)…': 'Carregando o conversor (na primeira vez pode demorar um pouco)…',
+    'That file could not be converted. Try a smaller or different file.': 'Não foi possível converter esse arquivo. Tente um arquivo menor ou diferente.',
+    'This PDF is password-protected': 'Este PDF está protegido por senha',
+    'Could not read this PDF': 'Não foi possível ler este PDF',
+    'Enter the pages you want': 'Digite as páginas que você quer',
+    'Move up': 'Subir',
+    'Move down': 'Descer',
+    'Remove': 'Remover',
+    'Merge PDFs': 'Juntar PDFs',
+    'Add at least two PDFs.': 'Adicione pelo menos dois PDFs.',
+    'Extract pages into one PDF': 'Extrair páginas em um PDF',
+    'Every page as its own PDF': 'Cada página em um PDF separado',
+    'Pages': 'Páginas',
+    'Split PDF': 'Dividir PDF',
+    'Mode': 'Modo',
+    'Same as image': 'Igual à imagem',
+    'US Letter': 'Carta (EUA)',
+    'No margin': 'Sem margem',
+    'Small margin': 'Margem pequena',
+    'Big margin': 'Margem grande',
+    'Create PDF': 'Criar PDF',
+    'Page size': 'Tamanho da página',
+    'Margin': 'Margem',
+    'Could not create the PDF': 'Não foi possível criar o PDF',
+    'All pages': 'Todas as páginas',
+    'Rotate': 'Girar',
+    'Pages (optional)': 'Páginas (opcional)',
+    'Normal (72 dpi)': 'Normal (72 dpi)',
+    'High (144 dpi)': 'Alta (144 dpi)',
+    'Very high (216 dpi)': 'Muito alta (216 dpi)',
+    'Image format': 'Formato da imagem',
+    'Quality': 'Qualidade',
+    'Choose a PDF or drop it here': 'Escolha um PDF ou arraste-o para cá',
+    'Choose PDFs or drop them here': 'Escolha PDFs ou arraste-os para cá',
+    'Your files stay on your device. Nothing is uploaded.': 'Seus arquivos ficam no seu dispositivo. Nada é enviado.',
+    'This tool needs a modern browser (Chrome, Edge, Firefox or Safari).': 'Esta ferramenta precisa de um navegador moderno (Chrome, Edge, Firefox ou Safari).',
+  },
+  patterns: [
+    ['^Converting… (\\d+)%$', 'Convertendo… $1%'],
+    ['^(\\d+) files? done\\.$', '$1 arquivo(s) pronto(s).'],
+    ['^Pages must be between 1 and (\\d+)$', 'As páginas devem estar entre 1 e $1'],
+    ['^Merged (\\d+) files into merged\\.pdf \\((\\d+) pages\\)\\.$', '$1 arquivos juntados em merged.pdf ($2 páginas).'],
+    ['^Saved (\\d+) pages?\\.$', '$1 página(s) salva(s).'],
+    ['^Split into (\\d+) files \\(ZIP\\)\\.$', 'Dividido em $1 arquivos (ZIP).'],
+    ['^Created images\\.pdf with (\\d+) pages?\\.$', 'images.pdf criado com $1 página(s).'],
+    ['^Download (\\d+) images \\(ZIP\\)$', 'Baixar $1 imagens (ZIP)'],
+    ['^(\\d+) pages$', '$1 páginas'],
+  ],
+};
+
+const slugify = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+// ---------- Generated families ----------
+const imgIntro = {
+  'png-to-jpg': 'Para fotos, arquivos JPG são bem menores que PNG, o que facilita mandar por e-mail e fazer upload. As áreas transparentes são preenchidas com branco, porque o JPG não tem transparência.',
+  'jpg-to-png': 'O PNG é sem perdas, então é uma boa escolha quando você quer continuar editando a imagem sem acrescentar mais compressão. O PNG vai ficar maior que o JPG.',
+  'webp-to-jpg': 'Alguns apps, editores e formulários de upload ainda não aceitam WebP. Converter para JPG faz a imagem abrir em qualquer lugar.',
+  'webp-to-png': 'Converter WebP para PNG mantém a transparência e gera um arquivo que qualquer editor consegue abrir.',
+  'jpg-to-webp': 'O WebP costuma ser de 25 a 35% menor que o JPG com a mesma qualidade visual, o que ajuda as páginas a carregar mais rápido e pode melhorar a posição nas buscas.',
+  'png-to-webp': 'O WebP mantém a transparência como o PNG, mas muitas vezes é várias vezes menor, o que o torna ideal para logotipos, ícones e capturas de tela em sites.',
+  'bmp-to-png': 'Arquivos BMP não têm compressão e são muito grandes. O PNG mantém cada pixel, mas costuma ocupar uma fração do tamanho.',
+  'bmp-to-jpg': 'Arquivos BMP de scanners antigos e do Paint do Windows são enormes. O JPG deixa esses arquivos pequenos o bastante para mandar por e-mail ou fazer upload.',
+  'gif-to-png': 'Salva o primeiro quadro de um GIF como imagem PNG estática, com cores completas em vez das 256 cores do GIF.',
+  'gif-to-jpg': 'Salva o primeiro quadro de um GIF como JPG estático, prático para miniaturas e prévias.',
+  'svg-to-png': 'Logotipos e ícones em SVG não abrem em todo lugar. Um PNG funciona em documentos, slides e posts nas redes sociais, e mantém a transparência.',
+  'svg-to-jpg': 'Transforme um logotipo ou desenho em SVG em um JPG que qualquer app consegue abrir. As áreas transparentes ficam brancas.',
+  'avif-to-jpg': 'AVIF é um formato de imagem novo e muito leve que muitos apps e aparelhos mais antigos ainda não abrem. O JPG funciona em qualquer lugar.',
+  'avif-to-png': 'Imagens AVIF muitas vezes não abrem em editores ou programas mais antigos. O PNG é aceito em qualquer lugar e mantém a transparência.',
+};
+function img(t, [, from, to, F, T]) {
+  return {
+    slug: `${from}-para-${to}`,
+    name: `${F} para ${T}`, blurb: `Converta imagens ${F} para ${T}`,
+    title: `Converter ${F} para ${T} – Grátis, rápido e sem upload`,
+    desc: `Converta ${F} para ${T} grátis no seu navegador. Conversão em lote, qualidade total, sem enviar arquivos e sem cadastro.`,
+    h1: `Converter ${F} para ${T}`,
+    lead: `Transforme imagens ${F} em arquivos ${T} em segundos, uma de cada vez ou várias de uma vez.`,
+    intro: imgIntro[t.slug],
+    steps: [`Escolha seus arquivos ${F} ou arraste-os para a caixa.`, `Confira se "${T}" está selecionado${to === 'png' ? '' : ' e ajuste a qualidade'}.`, `Baixe cada arquivo ${T} ou todos juntos em um ZIP.`],
+    faq: [
+      [`Converter ${F} para ${T} perde qualidade?`, to === 'png' ? `Não. O PNG é sem perdas, então mantém cada pixel do ${F}.` : `O ${T} é um formato comprimido. Com qualidade de 85 a 95%, a diferença é muito difícil de notar.`],
+      [`Posso converter vários arquivos ${F} de uma vez?`, 'Sim. Escolha ou arraste quantos quiser e baixe todos juntos em um ZIP.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  };
+}
+
+const audioIntro = {
+  'mov-to-mp3': 'MOV é o formato em que iPhones e Macs gravam vídeo. Extraia o som de um vídeo do iPhone, de um ensaio ou de uma entrevista como MP3.',
+  'webm-to-mp3': 'Arquivos WebM vêm de gravadores de tela, navegadores e algumas ferramentas de download. Salve a faixa de áudio como MP3 para ouvir no celular ou no app de podcasts.',
+  'mkv-to-mp3': 'MKV é um contêiner usado por muitas câmeras e apps de gravação. Extraia o áudio do seu próprio arquivo MKV como MP3.',
+  'avi-to-mp3': 'AVI é um formato de vídeo mais antigo do Windows. Salve o áudio de vídeos caseiros antigos ou de gravações como MP3.',
+  'ogg-to-mp3': 'OGG Vorbis é um formato de áudio aberto que muitos sons de carro e aparelhos da Apple não reproduzem. O MP3 toca em qualquer aparelho.',
+  'flac-to-mp3': 'O FLAC é sem perdas e pesado, cerca de 30 MB por música. Um MP3 de 320 kbps soa quase igual com um quarto do tamanho, então cabem mais músicas no celular ou no pen drive.',
+  'aac-to-mp3': 'O AAC é usado pelo iTunes, pelo YouTube e por muitos celulares. Alguns players e apps mais antigos só aceitam MP3.',
+  'mp4-to-wav': 'Precisa do áudio de um vídeo para editar? O WAV não tem compressão, então é o formato mais seguro para levar ao Audacity, ao GarageBand ou a uma DAW.',
+  'mp3-to-wav': 'Alguns editores, samplers e sistemas de telefonia só aceitam WAV. Converter MP3 para WAV deixa o arquivo compatível, mas não recupera os detalhes que o MP3 removeu.',
+  'm4a-to-wav': 'M4A é o formato das gravações de voz do iPhone e dos downloads do iTunes. O WAV abre em qualquer editor de áudio.',
+};
+function audio(t, [, from, F, to]) {
+  const T = to.toUpperCase();
+  return {
+    slug: `${from}-para-${to}`,
+    name: `${F} para ${T}`, blurb: /mp4|mov|webm|mkv|avi/.test(from) ? `Extraia o áudio de arquivos ${F}` : `Converta áudio ${F} para ${T}`,
+    title: `Converter ${F} para ${T} – Grátis, privado e sem upload`,
+    desc: `Converta ${F} para ${T} grátis no seu navegador. ${to === 'mp3' ? 'Escolha de 128 a 320 kbps.' : 'WAV sem compressão para edição.'} Sem enviar arquivos, sem cadastro e sem marca d'água.`,
+    h1: `Converter ${F} para ${T}`,
+    lead: `Transforme arquivos ${F} em áudio ${T} em poucos segundos, no seu próprio dispositivo.`,
+    intro: audioIntro[t.slug],
+    steps: [`Escolha seus arquivos ${F} ou arraste-os para a caixa.`, to === 'mp3' ? 'Escolha a qualidade do MP3. 192 kbps serve para quase tudo; 320 kbps para música.' : 'Deixe WAV selecionado.', 'Aguarde enquanto o áudio é convertido.', `Baixe seu arquivo ${T}.`],
+    faq: [
+      [to === 'mp3' ? 'Qual qualidade de MP3 devo escolher?' : 'Por que escolher WAV?', to === 'mp3' ? '128 kbps é suficiente para voz, 192 kbps para a maioria das músicas e 320 kbps para a melhor qualidade.' : 'O WAV não tem compressão, então é o formato mais seguro para editar no Audacity, no GarageBand ou em qualquer DAW. Os arquivos ocupam cerca de 10 MB por minuto.'],
+      [`Posso converter vários arquivos ${F} de uma vez?`, 'Sim. Adicione quantos quiser e eles são convertidos um depois do outro.'],
+      ['Meus arquivos são enviados para algum servidor?', local],
+    ],
+  };
+}
+
+const videoIntro = {
+  'webm-to-mp4': 'Gravações de tela e downloads do navegador em WebM não rodam em muitos celulares, TVs nem no PowerPoint.',
+  'mkv-to-mp4': 'Arquivos MKV muitas vezes não rodam no iPhone, em smart TVs nem em editores de vídeo.',
+  'avi-to-mp4': 'O AVI é um formato antigo e pesado que celulares e sites não suportam bem.',
+  'flv-to-mp4': 'O FLV é um formato de vídeo antigo do Flash que os aparelhos modernos não conseguem reproduzir.',
+  'mp4-to-webm': 'Está criando um site?',
+  'mp4-to-mov': 'Vai editar no Mac?',
+};
+function video(t, [, from, F, to]) {
+  const T = to.toUpperCase();
+  const tail = to === 'mp4' ? 'O MP4 com H.264 roda em quase todo celular, computador, TV e site.' : to === 'webm' ? 'O WebM é um formato aberto feito para a web e roda em todos os navegadores modernos.' : 'O MOV é o formato de vídeo da Apple e abre sem problemas no QuickTime, no iMovie e no Final Cut.';
+  return {
+    slug: `${from}-para-${to}`,
+    name: `${F} para ${T}`, blurb: `Converta vídeos ${F} para ${T}`,
+    title: `Converter ${F} para ${T} – Grátis, sem upload e sem marca d'água`,
+    desc: `Converta ${F} para ${T} grátis no seu navegador. Sem enviar arquivos, sem marca d'água e sem cadastro. Funciona no Windows, no Mac e no Chromebook.`,
+    h1: `Converter ${F} para ${T}`,
+    lead: `Transforme vídeos ${F} em arquivos ${T} que rodam onde você precisa.`,
+    intro: `${videoIntro[t.slug]} ${tail}`,
+    steps: [`Escolha seu vídeo ${F} ou arraste-o para a caixa.`, `Deixe "${to === 'mp4' ? 'MP4 (H.264)' : to === 'webm' ? 'WebM (VP8)' : 'MOV'}" selecionado.`, 'Mantenha a aba aberta durante a conversão.', `Baixe seu ${T}.`],
+    faq: [
+      [`Converter ${F} para ${T} diminui a qualidade?`, 'O vídeo é recodificado com uma configuração de alta qualidade, então a diferença é difícil de notar.'],
+      ['Quanto tempo demora?', 'Mais ou menos a duração do próprio vídeo, em um notebook comum. Clipes curtos são rápidos; vídeos longos vão mais rápido no computador do que no celular.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  };
+}
+
+const sizeWhy = {
+  'compress-image-to-20kb': 'Alguns formulários do governo e de concursos só aceitam fotos e assinaturas com menos de 20 KB.',
+  'compress-image-to-50kb': 'Portais de vagas, inscrições em provas e pedidos de documentos de identidade costumam exigir imagens com menos de 50 KB.',
+  'compress-image-to-100kb': 'Muitos formulários online, páginas de perfil e sistemas de e-mail limitam as imagens enviadas a 100 KB.',
+  'compress-image-to-200kb': 'Formulários de inscrição e sites costumam limitar as fotos a 200 KB.',
+  'compress-image-to-500kb': 'O limite de 500 KB é comum em fóruns, portais escolares e sites de anúncios.',
+  'compress-image-to-1mb': 'Muitos sites e serviços de e-mail limitam os anexos a cerca de 1 MB por imagem.',
+  'compress-jpeg-to-100kb': 'JPEGs de celular costumam ter de 2 a 5 MB, muito acima dos 100 KB que muitos formulários aceitam.',
+  'compress-jpeg-to-200kb': 'JPEGs de celular costumam ter de 2 a 5 MB, muito acima dos 200 KB que muitos formulários aceitam.',
+};
+function size(t, [, kb, jpeg]) {
+  const L = kb >= 1000 ? `${kb / 1000} MB` : `${kb} KB`;
+  const what = jpeg ? 'JPEG' : 'imagem';
+  return {
+    slug: `comprimir-${jpeg ? 'jpeg' : 'imagem'}-para-${kb >= 1000 ? kb / 1000 + 'mb' : kb + 'kb'}`,
+    name: `Comprimir ${what} para ${L}`, blurb: `Deixe qualquer ${jpeg ? 'foto JPG' : 'imagem'} com menos de ${L}`,
+    title: `Comprimir ${jpeg ? 'JPEG' : 'imagem'} para ${L} – Grátis, tamanho exato, sem upload`,
+    desc: `Comprima ${jpeg ? 'uma foto JPG' : 'uma imagem'} para ${L} ou menos em um só passo. A ferramenta encontra a melhor qualidade que cabe em ${L}. Grátis, privado, sem enviar arquivos e sem cadastro.`,
+    h1: `Comprimir ${jpeg ? 'um JPEG' : 'uma imagem'} para ${L}`,
+    lead: `Coloque uma foto e receba uma cópia com menos de ${L}, com a melhor qualidade que ainda cabe.`,
+    intro: `${sizeWhy[t.slug]} Em vez de você adivinhar a qualidade, a ferramenta testa várias configurações e fica com a versão mais nítida que fica abaixo de ${L}. Se a foto for muito grande, ela também é reduzida um pouco até caber.`,
+    steps: [`Escolha suas fotos${jpeg ? ' JPG' : ''} ou arraste-as para a caixa.`, `Deixe o tamanho desejado em ${kb} KB ou digite outro tamanho.`, `Baixe cada foto com menos de ${L} ou todas juntas em um ZIP.`],
+    faq: [
+      [`A foto vai ficar com exatamente ${L}?`, `Vai ficar com ${L} ou um pouco menos. A ferramenta escolhe a maior qualidade que ainda cabe no limite.`],
+      ['Por que minha imagem ficou com menos pixels?', `Algumas fotos não chegam a ${L} só baixando a qualidade. Nesse caso, a ferramenta reduz a largura e a altura aos poucos até o arquivo caber.`],
+      ['Posso fazer várias fotos de uma vez?', 'Sim. Cada foto que você adicionar é ajustada ao mesmo tamanho, e você pode baixar todas juntas em um ZIP.'],
+      ['Minhas fotos são enviadas para algum servidor?', local],
+    ],
+  };
+}
+
+const sites = {
+  'resize-image-for-instagram': ['redimensionar-imagem-para-instagram', 'o Instagram', 'O Instagram mostra os posts com 1080 px de largura. Posts quadrados têm 1080 × 1080, e os verticais, 1080 × 1350.', 'Definir só a largura mantém a proporção da foto, então nada fica esticado.'],
+  'resize-image-for-youtube-thumbnail': ['redimensionar-imagem-para-miniatura-do-youtube', 'uma miniatura do YouTube', 'O YouTube recomenda miniaturas de 1280 × 720 pixels (16:9) com menos de 2 MB.', 'Comece com uma imagem panorâmica 16:9 para que ela não fique esticada.'],
+  'resize-image-for-facebook-cover': ['redimensionar-imagem-para-capa-do-facebook', 'uma foto de capa do Facebook', 'As fotos de capa do Facebook aparecem com 851 × 315 pixels no computador.', 'Escolha uma imagem larga ou apague a altura para manter a proporção.'],
+  'resize-image-for-twitter-header': ['redimensionar-imagem-para-cabecalho-do-x-twitter', 'um cabeçalho do X (Twitter)', 'As imagens de cabeçalho do X (Twitter) têm 1500 × 500 pixels.', 'Use uma imagem larga 3:1 ou apague a altura para manter a proporção.'],
+};
+function site(t, [, , w, h]) {
+  const [slug, name, why, tip] = sites[t.slug];
+  const short = name.replace(/^(uma|um|o|a) /, '');
+  const dims = `${w}${h ? ' × ' + h : ' px de largura'}`;
+  return {
+    slug,
+    name: `Redimensionar para ${short}`, blurb: dims,
+    title: `Redimensionar imagem para ${short} – ${w}${h ? '×' + h : ' px'} grátis, sem upload`,
+    desc: `Deixe suas fotos no tamanho certo para ${name} (${dims}). Grátis, rápido e no seu navegador, sem enviar nada.`,
+    h1: `Redimensionar uma imagem para ${name}`,
+    lead: `${h ? 'A largura e a altura já estão preenchidas' : 'A largura já está preenchida'} para ${name}. É só adicionar sua foto.`,
+    intro: `${why} ${tip}`,
+    steps: ['Escolha sua imagem ou arraste-a para a caixa.', `Mantenha o tamanho predefinido de ${dims} ou altere.`, 'Baixe a imagem redimensionada e publique.'],
+    faq: [
+      [`Qual é o melhor tamanho para ${name}?`, why],
+      ['Minha foto vai ficar esticada?', h ? `Só se a proporção dela for diferente de ${w} × ${h}. ${tip}` : 'Não. Só a largura é definida, então a altura acompanha a proporção original.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  };
+}
+
+// ---------- Hand-written pages ----------
+const hand = {
+  'compress-jpeg': {
+    slug: 'comprimir-jpeg', name: 'Comprimir JPEG', blurb: 'Reduza fotos JPG sem perda visível',
+    title: 'Comprimir JPEG online – Reduza o tamanho de JPG grátis, sem upload',
+    desc: 'Comprima fotos JPEG e JPG grátis. Reduza o tamanho do arquivo em até 80% sem perda de qualidade visível. Em lote, sem enviar arquivos e sem cadastro.',
+    h1: 'Comprimir imagens JPEG',
+    lead: 'Deixe suas fotos JPG mais leves para e-mail, sites e formulários, sem perder a nitidez.',
+    intro: 'Fotos de celular costumam ter de 3 a 8 MB, e a maior parte desse tamanho é detalhe que o olho não percebe. Uma qualidade entre 70 e 80% normalmente corta o arquivo pela metade ou mais, e definir uma largura máxima (por exemplo, 1920 px) reduz ainda mais.',
+    steps: ['Escolha suas fotos JPG ou arraste-as para a caixa.', 'Escolha a qualidade. 75% é um bom equilíbrio entre tamanho e nitidez.', 'Se quiser, defina uma largura máxima para deixar as fotos grandes ainda menores.', 'Baixe cada foto ou todas juntas em um ZIP.'],
+    faq: [
+      ['Quanto meu JPEG vai diminuir?', 'Normalmente de 40 a 80%, dependendo da foto e da qualidade escolhida. Se a foto já estiver bem comprimida, o original é mantido, para que ela nunca fique maior.'],
+      ['Qual qualidade devo escolher?', '75% funciona para a maioria das fotos. Use 85 a 90% para impressão ou imagens com muitos detalhes, e 60% quando o tamanho importa mais, como em anexos de e-mail.'],
+      ['Existe limite de tamanho ou de quantidade?', 'Não há um limite fixo. Lotes muito grandes dependem da memória do seu dispositivo.'],
+      ['Minhas fotos são enviadas para algum lugar?', local],
+    ],
+  },
+  'compress-image': {
+    slug: 'compressor-de-imagens', name: 'Compressor de imagens', blurb: 'Comprima JPG, PNG e WebP',
+    title: 'Compressor de imagens – Comprima JPG, PNG e WebP grátis online',
+    desc: 'Compressor de imagens grátis para JPG, PNG e WebP. Reduza o tamanho das imagens para sites, e-mail e formulários. Funciona no seu navegador, sem enviar nada.',
+    h1: 'Compressor de imagens',
+    lead: 'Reduza o tamanho de imagens JPG, PNG e WebP em um só lugar.',
+    intro: 'JPG e WebP comprimem bem quando você diminui a qualidade. O PNG é sem perdas, então a maior economia vem de salvá-lo como WebP ou JPG. O WebP funciona em todos os navegadores modernos e costuma ser a opção mais leve para sites.',
+    steps: ['Escolha suas imagens ou arraste-as para a caixa.', 'Escolha a qualidade e o formato de saída. Para PNG, escolha WebP ou JPG para economizar mais.', 'Defina uma largura máxima se as imagens forem maiores do que você precisa.', 'Baixe cada imagem ou todas juntas em um ZIP.'],
+    faq: [
+      ['Por que meu PNG quase não diminuiu?', 'O PNG guarda cada pixel, então salvar de novo como PNG economiza pouco. Escolha WebP ou JPG como formato de saída para deixá-lo bem menor.'],
+      ['Comprimir remove a transparência?', 'WebP e PNG mantêm a transparência. O JPG não tem transparência, então as áreas transparentes ficam brancas.'],
+      ['Qual formato é o mais leve?', 'O WebP costuma ser de 25 a 35% menor que o JPG com a mesma qualidade visual.'],
+      ['Este compressor de imagens é seguro?', local],
+    ],
+  },
+  'resize-image': {
+    slug: 'redimensionar-imagem', name: 'Redimensionar imagem', blurb: 'Mude largura e altura em pixels ou %',
+    title: 'Redimensionar imagem online – Mude o tamanho em pixels ou % grátis',
+    desc: 'Redimensione imagens grátis em pixels ou porcentagem. Mantenha a proporção e redimensione JPG, PNG e WebP em lote. Sem enviar arquivos e sem cadastro.',
+    h1: 'Redimensionar imagens',
+    lead: 'Mude as dimensões de uma imagem em pixels ou porcentagem, para uma foto ou uma pasta inteira.',
+    intro: 'Digite só a largura ou só a altura e o outro lado é calculado para você, então nada fica esticado. Preencha os dois para definir um tamanho exato.',
+    steps: ['Escolha suas imagens ou arraste-as para a caixa.', 'Escolha pixels ou porcentagem e digite o tamanho que você quer.', 'Mantenha o formato original ou mude para JPG, PNG ou WebP.', 'Baixe as imagens redimensionadas.'],
+    faq: [
+      ['Como mantenho a proporção?', 'Preencha só a largura ou só a altura. O outro lado é calculado automaticamente.'],
+      ['Posso aumentar uma imagem?', 'Sim, mas aumentar não acrescenta detalhes, então ampliações muito grandes ficam sem nitidez.'],
+      ['Que tamanho devo usar para o Instagram ou para um site?', 'Os posts do Instagram ficam melhores com 1080 px de largura. Para a maioria dos sites, de 1600 a 1920 px de largura é mais que suficiente.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  },
+  'image-converter': {
+    slug: 'conversor-de-imagens', name: 'Conversor de imagens', blurb: 'Converta entre JPG, PNG e WebP',
+    title: 'Conversor de imagens – Converta JPG, PNG e WebP grátis online',
+    desc: 'Conversor de imagens grátis. Converta entre JPG, PNG e WebP no seu navegador. Conversão em lote, sem enviar arquivos e sem cadastro.',
+    h1: 'Conversor de imagens',
+    lead: 'Converta imagens entre JPG, PNG e WebP, uma de cada vez ou várias de uma vez.',
+    intro: 'Use JPG para fotos, PNG para gráficos e capturas de tela que precisam de bordas nítidas ou transparência, e WebP quando quiser o arquivo mais leve para a web.',
+    steps: ['Escolha suas imagens ou arraste-as para a caixa.', 'Escolha o formato para o qual quer converter.', 'Ajuste a qualidade para JPG ou WebP.', 'Baixe cada arquivo ou todos juntos em um ZIP.'],
+    faq: [
+      ['De quais formatos posso converter?', 'JPG, PNG, WebP, GIF (primeiro quadro), BMP, AVIF e SVG, desde que o seu navegador consiga abri-los.'],
+      ['Posso converter fotos HEIC do iPhone?', 'Só em navegadores que abrem HEIC, como o Safari no Mac e no iPhone. Em outros navegadores, configure a câmera do iPhone como "Mais Compatível" para salvar as fotos em JPG.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  },
+  'mp4-to-mp3': {
+    slug: 'mp4-para-mp3', name: 'MP4 para MP3', blurb: 'Extraia o áudio de vídeos MP4',
+    title: 'Converter MP4 para MP3 – Extraia o áudio grátis, sem upload',
+    desc: 'Converta MP4 para MP3 grátis. Extraia o áudio dos seus próprios vídeos MP4 em até 320 kbps. Funciona no seu navegador, sem enviar nada e sem cadastro.',
+    h1: 'Converter MP4 para MP3',
+    lead: 'Salve o som dos seus vídeos MP4 como um MP3 que toca em qualquer lugar.',
+    intro: 'Prático para transformar um ensaio gravado, uma aula, uma gravação de voz ou uma entrevista em um arquivo de áudio para o celular ou o app de podcasts. Use apenas com vídeos que são seus ou que você tem direito de usar.',
+    steps: ['Escolha seus arquivos MP4 ou arraste-os para a caixa.', 'Escolha a qualidade do MP3. 192 kbps é ótimo para quase tudo; 320 kbps para música.', 'Aguarde alguns segundos enquanto o áudio é convertido.', 'Baixe seu MP3.'],
+    faq: [
+      ['Qual qualidade de MP3 devo escolher?', '128 kbps é suficiente para voz, 192 kbps para a maioria das músicas e 320 kbps para a melhor qualidade.'],
+      ['Posso gerar um arquivo WAV em vez disso?', 'Sim. Escolha WAV como saída para ter áudio sem compressão, útil para edição.'],
+      ['Posso converter vídeos do YouTube aqui?', 'Não. Esta ferramenta trabalha com arquivos de vídeo que já estão no seu dispositivo. Baixar vídeos do YouTube vai contra os termos de uso da plataforma.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'video-to-mp3': {
+    slug: 'extrair-audio-de-video', name: 'Extrair áudio de vídeo', blurb: 'MOV, WebM, MKV, AVI para MP3',
+    title: 'Extrair áudio de vídeo – Conversor de vídeo para MP3 grátis',
+    desc: 'Extraia o áudio de qualquer vídeo: MOV, MP4, WebM, MKV e AVI para MP3 ou WAV. Grátis, privado e rápido. Sem enviar arquivos e sem cadastro.',
+    h1: 'Extrair áudio de vídeo',
+    lead: 'Transforme o áudio de um vídeo MOV, WebM, MKV ou AVI em MP3 ou WAV.',
+    intro: 'A maioria dos vídeos é convertida na hora. Formatos menos comuns usam um conversor embutido que é carregado na primeira vez que você precisa dele e depois fica salvo no cache do navegador.',
+    steps: ['Escolha seus vídeos ou arraste-os para a caixa.', 'Escolha MP3 ou WAV e a qualidade do MP3.', 'Aguarde enquanto o áudio é extraído.', 'Baixe o arquivo de áudio.'],
+    faq: [
+      ['Quais formatos de vídeo funcionam?', 'MP4, MOV, M4V, WebM, MKV, AVI, FLV, WMV e 3GP, na maioria dos casos.'],
+      ['Por que a primeira conversão demorou mais?', 'Alguns formatos precisam do conversor completo, de cerca de 30 MB, que é baixado uma vez e depois fica no cache do navegador.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'wav-to-mp3': {
+    slug: 'wav-para-mp3', name: 'WAV para MP3', blurb: 'Reduza gravações WAV para MP3',
+    title: 'Converter WAV para MP3 – Grátis, rápido e sem upload',
+    desc: 'Converta WAV para MP3 grátis no seu navegador. Deixe gravações WAV grandes até 10 vezes menores, de 128 a 320 kbps. Sem enviar nada e sem cadastro.',
+    h1: 'Converter WAV para MP3',
+    lead: 'Deixe gravações WAV grandes leves o bastante para mandar por e-mail, compartilhar ou guardar.',
+    intro: 'Um WAV estéreo de 5 minutos tem cerca de 50 MB. Como MP3 de 192 kbps, fica com cerca de 7 MB e soa igual para a maioria das pessoas.',
+    steps: ['Escolha seus arquivos WAV ou arraste-os para a caixa.', 'Escolha a qualidade do MP3.', 'Baixe os arquivos MP3.'],
+    faq: [
+      ['Converter WAV para MP3 perde qualidade?', 'O MP3 é comprimido, mas de 256 a 320 kbps a diferença é muito difícil de ouvir.'],
+      ['Posso converter outros arquivos de áudio?', 'Sim. Arquivos FLAC, OGG, AAC e M4A também funcionam, dependendo do navegador.'],
+      ['Meus arquivos são enviados para algum servidor?', local],
+    ],
+  },
+  'm4a-to-mp3': {
+    slug: 'm4a-para-mp3', name: 'M4A para MP3', blurb: 'Converta gravações de voz do iPhone e M4A',
+    title: 'Converter M4A para MP3 – Converta gravações de voz grátis',
+    desc: 'Converta M4A para MP3 grátis, incluindo gravações de voz do iPhone e áudios do iTunes sem DRM. Funciona no seu navegador, sem enviar nada.',
+    h1: 'Converter M4A para MP3',
+    lead: 'Transforme arquivos M4A, como as gravações de voz do iPhone, em MP3 que tocam em qualquer aparelho.',
+    intro: 'O M4A é o formato de áudio padrão da Apple. Alguns carros, players antigos e sites só aceitam MP3, então converter faz o arquivo tocar em qualquer lugar.',
+    steps: ['Escolha seus arquivos M4A ou arraste-os para a caixa.', 'Escolha a qualidade do MP3.', 'Baixe seus arquivos MP3.'],
+    faq: [
+      ['Como tiro as gravações de voz do iPhone?', 'No app Gravador, toque em uma gravação, toque em Compartilhar e salve em Arquivos. Depois abra esta página no celular e escolha o arquivo.'],
+      ['Músicas compradas no iTunes podem ser convertidas?', 'Só as músicas sem proteção contra cópia (DRM).'],
+      ['Meus arquivos são enviados para algum servidor?', local],
+    ],
+  },
+  'video-converter': {
+    slug: 'conversor-de-video', name: 'Conversor de vídeo', blurb: 'Converta para MP4, WebM ou MOV',
+    title: 'Conversor de vídeo – Converta vídeos para MP4, WebM ou MOV grátis',
+    desc: "Conversor de vídeo online grátis. Converta MOV, MKV, AVI, WebM e outros para MP4, WebM ou MOV no seu navegador. Sem enviar arquivos e sem marca d'água.",
+    h1: 'Conversor de vídeo',
+    lead: 'Converta vídeos para MP4, WebM ou MOV sem instalar nada.',
+    intro: 'O MP4 com H.264 roda em quase todo celular, computador, TV e rede social, então é a escolha mais segura. A conversão acontece no seu dispositivo, por isso a velocidade depende do seu computador e da duração do vídeo.',
+    steps: ['Escolha um vídeo ou arraste-o para a caixa.', 'Escolha o formato para o qual quer converter.', 'Mantenha a aba aberta durante a conversão; a barra de progresso mostra quanto já foi.', 'Baixe o vídeo convertido.'],
+    faq: [
+      ["Tem marca d'água?", "Não. Seu vídeo é convertido do jeito que está, sem marca d'água e sem limite de tempo."],
+      ['Por que é mais lento que um programa instalado no computador?', 'O conversor roda dentro do seu navegador para proteger sua privacidade. Clipes curtos são convertidos rápido; vídeos longos ou em 4K demoram mais.'],
+      ['Qual é o tamanho máximo?', 'Vídeos de até cerca de 500 MB funcionam melhor. Arquivos maiores dependem da memória do seu dispositivo.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'mov-to-mp4': {
+    slug: 'mov-para-mp4', name: 'MOV para MP4', blurb: 'Converta vídeos do iPhone e do Mac',
+    title: "Converter MOV para MP4 – Grátis, sem upload e sem marca d'água",
+    desc: "Converta MOV para MP4 grátis. Faça vídeos do iPhone e do Mac rodarem no Windows, no Android e nas redes sociais. Sem enviar nada e sem marca d'água.",
+    h1: 'Converter MOV para MP4',
+    lead: 'Faça vídeos MOV do iPhone e do Mac rodarem no Windows, no Android e em qualquer rede social.',
+    intro: 'Os arquivos MOV do iPhone costumam usar codecs que o Windows e alguns sites não abrem. O MP4 com H.264 é o formato de vídeo mais compatível que existe.',
+    steps: ['Escolha seu vídeo MOV ou arraste-o para a caixa.', 'Deixe "MP4 (H.264)" selecionado.', 'Mantenha a aba aberta durante a conversão.', 'Baixe seu MP4.'],
+    faq: [
+      ['Converter MOV para MP4 diminui a qualidade?', 'O vídeo é recodificado com uma configuração de alta qualidade, então a diferença é difícil de notar.'],
+      ['Posso fazer isso no iPhone?', 'Sim, funciona no Safari do iPhone e do iPad, mas vídeos longos vão mais rápido no computador.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'compress-video': {
+    slug: 'comprimir-video', name: 'Comprimir vídeo', blurb: 'Deixe vídeos menores para compartilhar',
+    title: 'Comprimir vídeo online – Reduza o tamanho de MP4 grátis',
+    desc: "Comprima vídeos grátis no seu navegador. Reduza o tamanho de MP4, MOV e WebM para e-mail, WhatsApp e Discord. Sem enviar nada e sem marca d'água.",
+    h1: 'Comprimir vídeo',
+    lead: 'Diminua seus vídeos para caberem no e-mail, no WhatsApp, no Discord e nos limites de upload.',
+    intro: 'Baixar a resolução para 720p com compressão média costuma deixar um vídeo de celular de 3 a 10 vezes menor, e ele continua com boa aparência na tela do celular.',
+    steps: ['Escolha um vídeo ou arraste-o para a caixa.', 'Escolha o nível de compressão.', 'Escolha a resolução máxima. 720p serve para quase todo compartilhamento.', 'Baixe o MP4 menor.'],
+    faq: [
+      ['Quanto meu vídeo vai diminuir?', 'Depende do original. Vídeos de celular em 1080p ou 4K costumam diminuir de 70 a 90% em 720p com compressão média.'],
+      ['Qual configuração usar para o Discord ou o e-mail?', 'Escolha Forte e 480p ou 720p para ficar abaixo de 25 MB na maioria dos clipes curtos.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'video-to-gif': {
+    slug: 'video-para-gif', name: 'Vídeo para GIF', blurb: 'Crie um GIF a partir de um clipe',
+    title: 'Criar GIF a partir de vídeo – Converta MP4 para GIF grátis',
+    desc: "Crie GIFs a partir de vídeos MP4, MOV e WebM grátis. Escolha o início, a duração, o tamanho e a taxa de quadros. Sem enviar nada e sem marca d'água.",
+    h1: 'Criar GIF a partir de vídeo',
+    lead: 'Transforme um momento curto de um vídeo em um GIF animado.',
+    intro: 'GIFs ficam pesados rápido, então mantenha-os curtos: de 3 a 6 segundos, com 480 px de largura e 10 fps, é um bom tamanho para chats e sites.',
+    steps: ['Escolha um vídeo ou arraste-o para a caixa.', 'Defina onde o GIF começa e quanto tempo ele dura.', 'Escolha a taxa de quadros e a largura.', 'Baixe seu GIF.'],
+    faq: [
+      ['Qual é a duração máxima do GIF?', 'Até 60 segundos, mas GIFs mais curtos ficam bem menores e carregam mais rápido.'],
+      ['Por que meu GIF ficou maior que o vídeo?', 'O GIF é um formato antigo com compressão fraca. Diminua a largura, a taxa de quadros ou a duração para deixá-lo menor.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'mp4-to-gif': {
+    slug: 'mp4-para-gif', name: 'MP4 para GIF', blurb: 'Crie um GIF a partir de um clipe MP4',
+    title: 'Converter MP4 para GIF – Crie GIFs a partir de vídeos grátis, sem upload',
+    desc: "Transforme um clipe MP4 em um GIF animado grátis. Escolha o início, a duração, o tamanho e a taxa de quadros. Privado, sem enviar nada e sem marca d'água.",
+    h1: 'Converter MP4 para GIF',
+    lead: 'Recorte alguns segundos de um MP4 e salve como um GIF em loop.',
+    intro: 'GIFs tocam sozinhos em chats, e-mails e documentos onde vídeo não funciona. Mantenha-os curtos, de 2 a 6 segundos, e com cerca de 480 px de largura para que continuem leves para compartilhar.',
+    steps: ['Escolha seu MP4 ou arraste-o para a caixa.', 'Defina o início e a duração em segundos.', 'Escolha a largura e a taxa de quadros. 480 px a 12 fps é um bom ponto de partida.', 'Baixe seu GIF.'],
+    faq: [
+      ['Por que meu GIF ficou tão pesado?', 'O GIF é um formato antigo com compressão ruim. Um clipe mais curto, mais estreito ou com menos quadros por segundo fica bem menor.'],
+      ['Qual é a duração máxima do GIF?', 'Até 60 segundos, mas com menos de 6 segundos o arquivo fica com um tamanho razoável.'],
+      ['Meus vídeos são enviados para algum servidor?', local],
+    ],
+  },
+  'merge-pdf': {
+    slug: 'juntar-pdf', name: 'Juntar PDF', blurb: 'Combine vários PDFs em um só arquivo',
+    title: 'Juntar PDF – Combine arquivos PDF grátis online, sem upload',
+    desc: 'Junte arquivos PDF em um só documento grátis. Defina a ordem que quiser. Funciona no seu navegador, é privado, sem enviar nada e sem cadastro.',
+    h1: 'Juntar arquivos PDF',
+    lead: 'Combine vários PDFs em um único documento, na ordem que você escolher.',
+    intro: 'Útil para montar inscrições, faturas, contratos e páginas digitalizadas. Como nada é enviado, é seguro para documentos privados.',
+    steps: ['Escolha seus arquivos PDF ou arraste-os para a caixa.', 'Use as setas para colocá-los na ordem certa.', 'Clique em "Juntar PDFs".', 'Seu PDF combinado é baixado automaticamente.'],
+    faq: [
+      ['Existe limite de quantos PDFs posso juntar?', 'Não há um limite fixo. Arquivos muito grandes dependem da memória do seu dispositivo.'],
+      ['Posso juntar PDFs protegidos por senha?', 'Não. Remova a senha antes, no app que você usa para abrir o arquivo.'],
+      ['Meus PDFs são enviados para algum servidor?', local],
+    ],
+  },
+  'split-pdf': {
+    slug: 'dividir-pdf', name: 'Dividir PDF', blurb: 'Extraia páginas ou separe todas as páginas',
+    title: 'Dividir PDF – Extraia páginas de um PDF grátis, sem upload',
+    desc: 'Divida um PDF grátis. Extraia só as páginas necessárias ou salve cada página como um PDF separado. Privado, no seu navegador, sem enviar nada.',
+    h1: 'Dividir PDF',
+    lead: 'Tire só as páginas necessárias ou separe um PDF em páginas avulsas.',
+    intro: 'Digite páginas e intervalos como "1-3, 7, 10-" para montar um novo PDF só com essas páginas. Deixar páginas de fora também é um jeito fácil de excluí-las.',
+    steps: ['Escolha um PDF ou arraste-o para a caixa.', 'Escolha "Extrair páginas" e digite as páginas, ou escolha "Cada página".', 'Clique em "Dividir PDF".', 'Baixe o novo PDF ou o ZIP com as páginas.'],
+    faq: [
+      ['Como excluo páginas de um PDF?', 'Extraia todas as páginas, menos as que você quer excluir. Por exemplo, para tirar a página 4 de um arquivo de 10 páginas, digite "1-3, 5-10".'],
+      ['O que significa "10-"?', 'Significa da página 10 até a última.'],
+      ['Meus PDFs são enviados para algum servidor?', local],
+    ],
+  },
+  'jpg-to-pdf': {
+    slug: 'jpg-para-pdf', name: 'JPG para PDF', blurb: 'Transforme fotos e digitalizações em PDF',
+    title: 'Converter JPG para PDF – Imagens para PDF grátis, sem upload',
+    desc: 'Converta JPG, PNG e outras imagens para PDF grátis. Junte fotos em um só PDF, em A4 ou Carta. Privado, sem enviar nada.',
+    h1: 'Converter JPG para PDF',
+    lead: 'Junte fotos, digitalizações e capturas de tela em um único PDF.',
+    intro: 'Ótimo para enviar fotos de recibos, documentos de identidade ou formulários assinados como um único documento organizado. Escolha A4 ou Carta (EUA) para páginas que imprimem bem, ou deixe cada página do tamanho da imagem.',
+    steps: ['Escolha suas imagens ou arraste-as para a caixa.', 'Use as setas para definir a ordem das páginas.', 'Escolha o tamanho da página e a margem.', 'Clique em "Criar PDF" para baixar.'],
+    faq: [
+      ['Quais tipos de imagem funcionam?', 'JPG, PNG, WebP, GIF e BMP. Cada imagem vira uma página.'],
+      ['O PDF vai imprimir bem?', 'Escolha A4 ou Carta (EUA) com margem pequena para uma impressão limpa.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  },
+  'png-to-pdf': {
+    slug: 'png-para-pdf', name: 'PNG para PDF', blurb: 'Transforme capturas de tela em PDF',
+    title: 'Converter PNG para PDF – Capturas de tela e imagens para PDF grátis',
+    desc: 'Converta imagens PNG e capturas de tela para PDF grátis. Junte várias em um só PDF, em A4 ou Carta. Privado, sem enviar nada.',
+    h1: 'Converter PNG para PDF',
+    lead: 'Junte capturas de tela e imagens PNG em um único PDF.',
+    intro: 'Útil para enviar uma sequência de capturas de tela, um histórico de conversa ou protótipos de design como um único documento que abre em qualquer lugar.',
+    steps: ['Escolha seus arquivos PNG ou arraste-os para a caixa.', 'Use as setas para definir a ordem das páginas.', 'Escolha o tamanho da página e a margem.', 'Clique em "Criar PDF" para baixar.'],
+    faq: [
+      ['A qualidade do PNG é mantida no PDF?', 'Sim. As imagens PNG são colocadas no PDF sem nova compressão.'],
+      ['Posso misturar PNG e JPG?', 'Sim. Qualquer combinação de PNG, JPG, WebP, GIF e BMP funciona.'],
+      ['Minhas imagens são enviadas para algum servidor?', local],
+    ],
+  },
+  'pdf-to-jpg': {
+    slug: 'pdf-para-jpg', name: 'PDF para JPG', blurb: 'Salve páginas de PDF como imagens',
+    title: 'Converter PDF para JPG – Páginas de PDF em imagens grátis',
+    desc: 'Converta PDF para JPG ou PNG grátis. Salve cada página como uma imagem de alta qualidade. Funciona no seu navegador, sem enviar nada.',
+    h1: 'Converter PDF para JPG',
+    lead: 'Salve cada página de um PDF como imagem JPG ou PNG.',
+    intro: 'Prático para postar um folheto ou cardápio nas redes sociais, colocar uma página em uma apresentação de slides ou mandar uma página para alguém que não consegue abrir PDF.',
+    steps: ['Escolha um PDF ou arraste-o para a caixa.', 'Escolha JPG ou PNG e a qualidade.', 'Baixe a imagem ou todas as páginas em um ZIP.'],
+    faq: [
+      ['Qual qualidade devo escolher?', 'Alta (144 dpi) serve para telas e redes sociais. Muito alta (216 dpi) é melhor para imprimir ou dar zoom.'],
+      ['Posso converter só uma página?', 'Converta o PDF e fique só com a imagem de que precisa. Ou use antes o Dividir PDF para separar essa página.'],
+      ['Meus PDFs são enviados para algum servidor?', local],
+    ],
+  },
+  'pdf-to-png': {
+    slug: 'pdf-para-png', name: 'PDF para PNG', blurb: 'Salve páginas de PDF como PNGs nítidos',
+    title: 'Converter PDF para PNG – Páginas de PDF em imagens PNG grátis',
+    desc: 'Converta páginas de PDF em imagens PNG grátis. Texto nítido, sem fundo transparente e sem perdas. Funciona no seu navegador, sem enviar nada.',
+    h1: 'Converter PDF para PNG',
+    lead: 'Salve cada página de um PDF como uma imagem PNG nítida.',
+    intro: 'O PNG mantém textos e linhas nítidos, sem bordas borradas, por isso é uma escolha melhor que o JPG para slides, gráficos, diagramas e documentos.',
+    steps: ['Escolha um PDF ou arraste-o para a caixa.', 'Deixe PNG selecionado e escolha a qualidade.', 'Baixe a imagem ou todas as páginas em um ZIP.'],
+    faq: [
+      ['PNG ou JPG para páginas de PDF?', 'PNG para textos, gráficos e diagramas. JPG para páginas com muitas fotos, quando um arquivo menor importa mais.'],
+      ['Posso converter só uma página?', 'Converta o PDF e fique com a página de que precisa, ou use antes o Dividir PDF.'],
+      ['Meus PDFs são enviados para algum servidor?', local],
+    ],
+  },
+  'rotate-pdf': {
+    slug: 'girar-pdf', name: 'Girar PDF', blurb: 'Corrija páginas de lado ou de cabeça para baixo',
+    title: 'Girar PDF – Gire páginas de PDF e salve grátis, sem upload',
+    desc: 'Gire páginas de PDF grátis e salve o resultado. Gire todas as páginas ou só algumas. Privado, no seu navegador, sem enviar nada.',
+    h1: 'Girar páginas de PDF',
+    lead: 'Corrija digitalizações de lado ou de cabeça para baixo e salve o PDF na posição certa.',
+    intro: 'Gire todas as páginas ou digite números de página como "2, 5-6" para girar só essas.',
+    steps: ['Escolha o giro e, se precisar, quais páginas.', 'Escolha seu PDF ou arraste-o para a caixa.', 'Baixe o PDF girado.'],
+    faq: [
+      ['O giro fica salvo de vez?', 'Sim. O PDF baixado abre com a nova orientação em qualquer leitor de PDF.'],
+      ['Posso girar só uma página?', 'Sim. Digite o número dela na caixa Páginas antes de escolher o arquivo.'],
+      ['Meus PDFs são enviados para algum servidor?', local],
+    ],
+  },
+  'compress-photo-for-email': {
+    slug: 'comprimir-fotos-para-email', name: 'Comprimir fotos para e-mail', blurb: 'Deixe fotos leves o bastante para anexar',
+    title: 'Comprimir fotos para e-mail – Reduza imagens para anexar, grátis',
+    desc: 'Deixe fotos do celular leves o bastante para mandar por e-mail. Reduz as imagens para cerca de 1600 px e uma fração do tamanho, para caberem mais em uma mensagem. Grátis, sem upload.',
+    h1: 'Comprimir fotos para e-mail',
+    lead: 'Reduza um lote de fotos do celular para anexar e enviar sem estourar o limite de tamanho.',
+    intro: 'O Gmail e o Outlook barram anexos acima de cerca de 20 a 25 MB por e-mail, o que dá só umas poucas fotos de celular. Redimensionar cada foto para 1600 px de largura mantém a nitidez em qualquer tela e costuma deixar cada arquivo com 300 a 600 KB, então você pode mandar muito mais fotos em um só e-mail.',
+    steps: ['Escolha suas fotos ou arraste-as para a caixa.', 'Mantenha a largura máxima em 1600 px e a qualidade em 75%.', 'Baixe todas em um ZIP, ou uma por uma, e anexe ao seu e-mail.'],
+    faq: [
+      ['Quantas fotos posso mandar por e-mail depois de comprimir?', 'Com cerca de 400 KB cada, umas 40 a 50 fotos cabem em um limite de 20 MB por e-mail.'],
+      ['As fotos vão continuar bonitas?', 'Sim. 1600 px de largura preenchem a tela de um notebook, e 75% de qualidade é difícil de distinguir do original.'],
+      ['Posso definir um tamanho exato?', 'Sim. Digite um número em Tamanho desejado (KB), por exemplo 500, e cada foto vai ficar abaixo dele.'],
+      ['Minhas fotos são enviadas para algum servidor?', local],
+    ],
+  },
+};
+
+const gens = { img, audio, video, size, site };
+
+// Returns the Portuguese page for an English tool entry
+export function translateTool(t) {
+  const out = t.gen ? gens[t.gen[0]](t, t.gen) : hand[t.slug];
+  if (!out) throw new Error('Missing Portuguese text for ' + t.slug);
+  for (const k of ['slug', 'name', 'blurb', 'title', 'desc', 'h1', 'lead', 'intro', 'steps', 'faq']) {
+    if (!out[k] || (typeof out[k] === 'string' && out[k].includes('undefined'))) throw new Error(`Portuguese ${k} missing for ${t.slug}`);
+  }
+  out.slug = slugify(out.slug);
+  return out;
+}

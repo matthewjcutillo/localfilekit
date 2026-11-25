@@ -4,6 +4,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tools, categories } from './src/tools.mjs';
 import * as es from './src/i18n/es.mjs';
+import * as pt from './src/i18n/pt.mjs';
+import * as de from './src/i18n/de.mjs';
+import * as ru from './src/i18n/ru.mjs';
+import * as el from './src/i18n/el.mjs';
+import * as hu from './src/i18n/hu.mjs';
+import * as ka from './src/i18n/ka.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'public');
@@ -18,12 +24,14 @@ const EN = { lang: 'en', locale: 'en_US', prefix: '', langName: 'English', home:
   nav: { image: 'Image', av: 'Audio &amp; Video', pdf: 'PDF', size: 'Exact sizes' },
   footNav: { about: 'About', privacy: 'Privacy Policy', terms: 'Terms', contact: 'Contact' },
   footer: 'Free file tools that run in your browser. Files are never uploaded.' };
-const ES = es.ui;
-const LANGS = [EN, ES];
-const esBySlug = Object.fromEntries(tools.map((t) => [t.slug, { ...t, ...es.translateTool(t), en: t.slug }]));
-const toolIn = (L, slug) => (L === ES ? esBySlug[slug] : bySlug[slug]);
+const MODS = [es, pt, de, ru, el, hu, ka];
+const OTHER = MODS.map((m) => m.ui);
+const LANGS = [EN, ...OTHER];
+const BY = new Map([[EN, bySlug], ...MODS.map((m) => [m.ui, Object.fromEntries(tools.map((t) => [t.slug, { ...t, ...m.translateTool(t), en: t.slug }]))])]);
+const toolIn = (L, slug) => BY.get(L)[slug];
 const toolsIn = (L) => tools.map((t) => toolIn(L, t.slug));
-const catName = (L, c) => (L === ES ? ES.cats[c.id] : c.name);
+const catName = (L, c) => (L === EN ? c.name : L.cats[c.id]);
+const altsFor = (f) => Object.fromEntries(LANGS.map((x) => [x.lang, f(x)]));
 const toolPath = (L, slug) => `${L.prefix}/${toolIn(L, slug).slug}/`;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -44,9 +52,8 @@ function adSlot(key) {
 function layout({ title, desc, pathname, body, schema = [], noindex = false, L = EN, alts = null }) {
   const url = SITE + pathname;
   const hreflang = alts ? LANGS.map((x) => `<link rel="alternate" hreflang="${x.lang}" href="${SITE}${alts[x.lang]}">`).join('\n') + `\n<link rel="alternate" hreflang="x-default" href="${SITE}${alts.en}">` : '';
-  const other = LANGS.find((x) => x !== L);
-  const switcher = alts ? `<a class="lang" href="${alts[other.lang]}" hreflang="${other.lang}" lang="${other.lang}">${other.langName}</a>` : '';
-  const t9n = L === ES ? `<script>window.LFK_T=${JSON.stringify({ s: ES.strings, p: ES.patterns }).replace(/</g, '\\u003c')}</script>` : '';
+  const switcher = alts ? `<details class="langs"><summary>🌐 ${L.langName}</summary><div>${LANGS.filter((x) => x !== L).map((x) => `<a href="${alts[x.lang]}" hreflang="${x.lang}" lang="${x.lang}">${x.langName}</a>`).join('')}</div></details>` : '';
+  const t9n = L !== EN ? `<script>window.LFK_T=${JSON.stringify({ s: L.strings, p: L.patterns }).replace(/</g, '\\u003c')}</script>` : '';
   return `<!doctype html>
 <html lang="${L.lang}">
 <head>
@@ -103,7 +110,7 @@ function toolPage(t, L = EN) {
   const cat = categories.find((c) => c.id === t.cat);
   const related = t.related.map((s) => toolIn(L, s)).filter(Boolean);
   const more = tools.filter((x) => x.cat === t.cat && x.slug !== en && !t.related.includes(x.slug)).slice(0, 6).map((x) => toolIn(L, x.slug));
-  const S = L === ES ? ES : null;
+  const S = L === EN ? null : L;
   const data = [`data-family="${t.family}"`, t.mode && `data-mode="${t.mode}"`, t.to && `data-to="${t.to}"`, t.accept && `data-accept="${esc(t.accept)}"`, t.target && `data-target="${t.target}"`, t.maxw && `data-maxw="${t.maxw}"`, t.w && `data-w="${t.w}"`, t.h && `data-h="${t.h}"`].filter(Boolean).join(' ');
   const body = `
 <p class="crumbs"><a href="${L.prefix}/">${L.home}</a> › <a href="${L.prefix}/#${cat.id}">${esc(catName(L, cat))}</a> › ${esc(t.name)}</p>
@@ -130,12 +137,12 @@ ${adSlot('bottom')}
     faqSchema(t.faq),
     crumbs([[L.home, `${L.prefix}/`], [catName(L, cat), `${L.prefix}/#${cat.id}`], [t.name, `${L.prefix}/${t.slug}/`]]),
   ];
-  const alts = { en: toolPath(EN, en), es: toolPath(ES, en) };
+  const alts = altsFor((x) => toolPath(x, en));
   return layout({ title: t.title, desc: t.desc, pathname: `${L.prefix}/${t.slug}/`, body, schema, L, alts });
 }
 
 function homePage(L = EN) {
-  const S = L === ES ? ES : null;
+  const S = L === EN ? null : L;
   const list = toolsIn(L);
   const homeFaq = S ? S.homeFaq(NAME) : [
     ['Are these tools really free?', `Yes. Every tool on ${NAME} is free with no sign-up, no watermark and no daily limit. The site is supported by ads.`],
@@ -172,7 +179,7 @@ ${faqHtml(homeFaq)}
     { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.name, url: `${SITE}${L.prefix}/${t.slug}/` })) },
     faqSchema(homeFaq),
   ];
-  return layout({ title: S ? S.homeTitle(NAME) : `${NAME} – Free File Converter & Compressor, No Upload`, desc: S ? S.homeDesc : 'Free online tools to compress JPEG, convert images, convert MP4 to MP3, compress video and merge or split PDF. Private: files never leave your device.', pathname: `${L.prefix}/`, body, schema, L, alts: { en: '/', es: '/es/' } });
+  return layout({ title: S ? S.homeTitle(NAME) : `${NAME} – Free File Converter & Compressor, No Upload`, desc: S ? S.homeDesc : 'Free online tools to compress JPEG, convert images, convert MP4 to MP3, compress video and merge or split PDF. Private: files never leave your device.', pathname: `${L.prefix}/`, body, schema, L, alts: altsFor((x) => `${x.prefix}/`) });
 }
 
 const contactLine = cfg.contactEmail
@@ -244,18 +251,20 @@ copy('vendor', 'vendor');
 copy('src/static', '.');
 write('index.html', homePage());
 for (const t of tools) write(`${t.slug}/index.html`, toolPage(t));
-write('es/index.html', homePage(ES));
-for (const t of toolsIn(ES)) write(`es/${t.slug}/index.html`, toolPage(t, ES));
+for (const L of OTHER) {
+  write(`${L.prefix.slice(1)}/index.html`, homePage(L));
+  for (const t of toolsIn(L)) write(`${L.prefix.slice(1)}/${t.slug}/index.html`, toolPage(t, L));
+}
 for (const [slug, [name, title, desc, body]] of Object.entries(pages)) {
   write(`${slug}/index.html`, layout({ title, desc, pathname: `/${slug}/`, body: `<p class="crumbs"><a href="/">Home</a> › ${esc(name)}</p><div class="prose">${body}</div>` }));
 }
 write('404.html', layout({ title: `Page not found – ${NAME}`, desc: 'Page not found.', pathname: '/404/', noindex: true, body: `<h1>Page not found</h1><p class="lead">That page doesn’t exist. Pick a tool below.</p><div class="grid">${tools.slice(0, 12).map(tile).join('')}</div>` }));
 
 const urls = ['/', ...tools.map((t) => `/${t.slug}/`), ...Object.keys(pages).map((p) => `/${p}/`)];
-const pairs = [['/', '/es/'], ...tools.map((t) => [toolPath(EN, t.slug), toolPath(ES, t.slug)])];
-const alt = ([en, sp]) => `<xhtml:link rel="alternate" hreflang="en" href="${SITE}${en}"/><xhtml:link rel="alternate" hreflang="es" href="${SITE}${sp}"/><xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${en}"/>`;
-const altFor = Object.fromEntries(pairs.flatMap((p) => [[p[0], alt(p)], [p[1], alt(p)]]));
-const allUrls = [...urls, ...pairs.map((p) => p[1])];
+const pairs = [LANGS.map((x) => `${x.prefix}/`), ...tools.map((t) => LANGS.map((x) => toolPath(x, t.slug)))];
+const alt = (g) => LANGS.map((x, i) => `<xhtml:link rel="alternate" hreflang="${x.lang}" href="${SITE}${g[i]}"/>`).join('') + `<xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${g[0]}"/>`;
+const altFor = Object.fromEntries(pairs.flatMap((g) => g.map((u) => [u, alt(g)])));
+const allUrls = [...urls, ...pairs.flatMap((g) => g.slice(1))];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${allUrls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod>${altFor[u] || ''}</url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 if (adsOn) write('ads.txt', `google.com, ${cfg.adsenseClient.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`);
