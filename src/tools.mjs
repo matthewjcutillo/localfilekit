@@ -9,6 +9,7 @@ export const categories = [
 ];
 
 const imgConvert = (from, to, F, T, extra) => ({
+  gen: ['img', from, to, F, T],
   slug: `${from}-to-${to}`, cat: 'image', family: 'image', mode: 'convert', to: to === 'jpg' ? 'jpg' : to,
   accept: from === 'jpg' ? 'image/jpeg,.jpg,.jpeg' : `image/${from},.${from}`,
   name: `${F} to ${T}`, blurb: `Convert ${F} images to ${T}`,
@@ -31,6 +32,7 @@ const kbLabel = (kb) => (kb >= 1000 ? `${kb / 1000} MB` : `${kb} KB`);
 const toSize = (kb, jpeg, why) => {
   const L = kbLabel(kb), what = jpeg ? 'JPEG' : 'Image', thing = jpeg ? 'JPG photo' : 'image';
   return {
+    gen: ['size', kb, jpeg],
     slug: `compress-${jpeg ? 'jpeg' : 'image'}-to-${kb >= 1000 ? kb / 1000 + 'mb' : kb + 'kb'}`, cat: 'size', family: 'image', mode: 'compress', target: kb,
     accept: jpeg ? 'image/jpeg,.jpg,.jpeg' : 'image/*', to: 'jpg',
     name: `Compress ${what} to ${L}`, blurb: `Get any ${thing} under ${L}`,
@@ -50,6 +52,7 @@ const toSize = (kb, jpeg, why) => {
   };
 };
 const forSite = (slug, site, w, h, why, tip) => ({
+  gen: ['site', slug, w, h],
   slug, cat: 'size', family: 'image', mode: 'resize', w, h, accept: 'image/*',
   name: `Resize for ${site}`, blurb: `${w}${h ? ' × ' + h : ' px wide'}`,
   title: `Resize Image for ${site} – ${w}${h ? '×' + h : ' px'} Free, No Upload`,
@@ -69,6 +72,7 @@ const forSite = (slug, site, w, h, why, tip) => ({
 const toAudio = (from, F, to, accept, about, use) => {
   const T = to.toUpperCase(), isVid = /video/.test(accept);
   return {
+    gen: ['audio', from, F, to],
     slug: `${from}-to-${to}`, cat: 'av', family: 'audio', to, accept,
     name: `${F} to ${T}`, blurb: isVid ? `Pull the audio out of ${F} files` : `Convert ${F} audio to ${T}`,
     title: `${F} to ${T} Converter – Free, Private, No Upload`,
@@ -88,6 +92,7 @@ const toAudio = (from, F, to, accept, about, use) => {
 const toVideo = (from, F, to, accept, about) => {
   const T = to.toUpperCase();
   return {
+    gen: ['video', from, F, to],
     slug: `${from}-to-${to}`, cat: 'av', family: 'video', mode: 'convert', to, accept,
     name: `${F} to ${T}`, blurb: `Convert ${F} videos to ${T}`,
     title: `${F} to ${T} Converter – Free, No Upload, No Watermark`,

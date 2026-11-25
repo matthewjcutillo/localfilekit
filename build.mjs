@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tools, categories } from './src/tools.mjs';
+import * as es from './src/i18n/es.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(ROOT, 'public');
@@ -12,6 +13,18 @@ const NAME = cfg.name;
 const YEAR = new Date().getFullYear();
 const TODAY = new Date().toISOString().slice(0, 10);
 const bySlug = Object.fromEntries(tools.map((t) => [t.slug, t]));
+// Language editions. English lives at /, Spanish at /es/.
+const EN = { lang: 'en', locale: 'en_US', prefix: '', langName: 'English', home: 'Home',
+  nav: { image: 'Image', av: 'Audio &amp; Video', pdf: 'PDF', size: 'Exact sizes' },
+  footNav: { about: 'About', privacy: 'Privacy Policy', terms: 'Terms', contact: 'Contact' },
+  footer: 'Free file tools that run in your browser. Files are never uploaded.' };
+const ES = es.ui;
+const LANGS = [EN, ES];
+const esBySlug = Object.fromEntries(tools.map((t) => [t.slug, { ...t, ...es.translateTool(t), en: t.slug }]));
+const toolIn = (L, slug) => (L === ES ? esBySlug[slug] : bySlug[slug]);
+const toolsIn = (L) => tools.map((t) => toolIn(L, t.slug));
+const catName = (L, c) => (L === ES ? ES.cats[c.id] : c.name);
+const toolPath = (L, slug) => `${L.prefix}/${toolIn(L, slug).slug}/`;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const ld = (obj) => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>`;
@@ -28,18 +41,24 @@ function adSlot(key) {
   return `<div class="ad"><ins class="adsbygoogle" style="display:block" data-ad-client="${esc(cfg.adsenseClient)}" data-ad-slot="${esc(slot)}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>`;
 }
 
-function layout({ title, desc, pathname, body, schema = [], noindex = false }) {
+function layout({ title, desc, pathname, body, schema = [], noindex = false, L = EN, alts = null }) {
   const url = SITE + pathname;
+  const hreflang = alts ? LANGS.map((x) => `<link rel="alternate" hreflang="${x.lang}" href="${SITE}${alts[x.lang]}">`).join('\n') + `\n<link rel="alternate" hreflang="x-default" href="${SITE}${alts.en}">` : '';
+  const other = LANGS.find((x) => x !== L);
+  const switcher = alts ? `<a class="lang" href="${alts[other.lang]}" hreflang="${other.lang}" lang="${other.lang}">${other.langName}</a>` : '';
+  const t9n = L === ES ? `<script>window.LFK_T=${JSON.stringify({ s: ES.strings, p: ES.patterns }).replace(/</g, '\\u003c')}</script>` : '';
   return `<!doctype html>
-<html lang="en">
+<html lang="${L.lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${url}">
+${hreflang}
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <meta property="og:type" content="website">
+<meta property="og:locale" content="${L.locale}">
 <meta property="og:site_name" content="${esc(NAME)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
@@ -58,94 +77,102 @@ ${schema.map(ld).join('\n')}
 </head>
 <body>
 <header class="site"><div class="wrap">
-<a class="logo" href="/">${LOGO}<span>${esc(NAME)}</span></a>
-<nav class="top" aria-label="Tool categories"><a href="/#image">Image</a><a href="/#av">Audio &amp; Video</a><a href="/#pdf">PDF</a><a href="/#size">Exact sizes</a></nav>
+<a class="logo" href="${L.prefix}/">${LOGO}<span>${esc(NAME)}</span></a>
+<nav class="top" aria-label="Tool categories"><a href="${L.prefix}/#image">${L.nav.image}</a><a href="${L.prefix}/#av">${L.nav.av}</a><a href="${L.prefix}/#pdf">${L.nav.pdf}</a><a href="${L.prefix}/#size">${L.nav.size}</a>${switcher}</nav>
 </div></header>
 <main><div class="wrap">
 ${body}
 </div></main>
 <footer class="site"><div class="wrap">
-<nav aria-label="Site"><a href="/about/">About</a><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms</a><a href="/contact/">Contact</a></nav>
-<div>© ${YEAR} ${esc(NAME)}. Free file tools that run in your browser. Files are never uploaded.</div>
+<nav aria-label="Site"><a href="/about/">${L.footNav.about}</a><a href="/privacy/">${L.footNav.privacy}</a><a href="/terms/">${L.footNav.terms}</a><a href="/contact/">${L.footNav.contact}</a></nav>
+<div>© ${YEAR} ${esc(NAME)}. ${L.footer}</div>
 </div></footer>
-<script type="module" src="/assets/js/main.js"></script>
+${t9n}<script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>
 `;
 }
 
-const tile = (t) => `<a class="tile" href="/${t.slug}/" data-k="${esc((t.name + ' ' + t.blurb + ' ' + t.slug.replace(/-/g, ' ')).toLowerCase())}"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></a>`;
+const tile = (t, L = EN) => `<a class="tile" href="${L.prefix}/${t.slug}/" data-k="${esc((t.name + ' ' + t.blurb + ' ' + t.slug.replace(/-/g, ' ') + ' ' + (t.en || '').replace(/-/g, ' ')).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))}"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></a>`;
 const faqHtml = (faq) => faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n');
 const faqSchema = (faq) => ({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
 const crumbs = (items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: SITE + p })) });
 
-function toolPage(t) {
+function toolPage(t, L = EN) {
+  const en = t.en || t.slug;
   const cat = categories.find((c) => c.id === t.cat);
-  const related = t.related.map((s) => bySlug[s]).filter(Boolean);
-  const more = tools.filter((x) => x.cat === t.cat && x.slug !== t.slug && !t.related.includes(x.slug)).slice(0, 6);
+  const related = t.related.map((s) => toolIn(L, s)).filter(Boolean);
+  const more = tools.filter((x) => x.cat === t.cat && x.slug !== en && !t.related.includes(x.slug)).slice(0, 6).map((x) => toolIn(L, x.slug));
+  const S = L === ES ? ES : null;
   const data = [`data-family="${t.family}"`, t.mode && `data-mode="${t.mode}"`, t.to && `data-to="${t.to}"`, t.accept && `data-accept="${esc(t.accept)}"`, t.target && `data-target="${t.target}"`, t.maxw && `data-maxw="${t.maxw}"`, t.w && `data-w="${t.w}"`, t.h && `data-h="${t.h}"`].filter(Boolean).join(' ');
   const body = `
-<p class="crumbs"><a href="/">Home</a> › <a href="/#${cat.id}">${esc(cat.name)}</a> › ${esc(t.name)}</p>
+<p class="crumbs"><a href="${L.prefix}/">${L.home}</a> › <a href="${L.prefix}/#${cat.id}">${esc(catName(L, cat))}</a> › ${esc(t.name)}</p>
 <h1>${esc(t.h1)}</h1>
 <p class="lead">${esc(t.lead)}</p>
-<div class="badge">🔒 Private: files stay on your device</div>
-<section class="tool" id="tool" ${data}><noscript>This tool needs JavaScript turned on.</noscript></section>
+<div class="badge">${S ? S.badge : '🔒 Private: files stay on your device'}</div>
+<section class="tool" id="tool" ${data}><noscript>${S ? S.noscript : 'This tool needs JavaScript turned on.'}</noscript></section>
 ${adSlot('top')}
 <div class="prose">
-<h2>How to ${esc(t.h1.charAt(0).toLowerCase() + t.h1.slice(1))}</h2>
+<h2>${S ? S.howTo + ': ' + esc(t.h1.charAt(0).toLowerCase() + t.h1.slice(1)) : 'How to ' + esc(t.h1.charAt(0).toLowerCase() + t.h1.slice(1))}</h2>
 <ol class="steps">${t.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
 <p>${esc(t.intro)}</p>
-<h2>Free, private and no sign-up</h2>
-<p>${esc(NAME)} runs entirely in your web browser. Your files are processed on your own device and are never sent to a server, so they stay private and there are no upload waits, no account and no watermark.</p>
-<h2>Questions</h2>
+<h2>${S ? S.freeH : 'Free, private and no sign-up'}</h2>
+<p>${S ? esc(S.freeP(NAME)) : `${esc(NAME)} runs entirely in your web browser. Your files are processed on your own device and are never sent to a server, so they stay private and there are no upload waits, no account and no watermark.`}</p>
+<h2>${S ? S.questions : 'Questions'}</h2>
 ${faqHtml(t.faq)}
 </div>
 ${adSlot('bottom')}
-<h2>Related tools</h2>
-<div class="grid">${[...related, ...more].slice(0, 6).map(tile).join('')}</div>
+<h2>${S ? S.related : 'Related tools'}</h2>
+<div class="grid">${[...related, ...more].slice(0, 6).map((x) => tile(x, L)).join('')}</div>
 `;
   const schema = [
-    { '@context': 'https://schema.org', '@type': 'WebApplication', name: `${t.name} – ${NAME}`, url: `${SITE}/${t.slug}/`, description: t.desc, applicationCategory: t.cat === 'image' ? 'MultimediaApplication' : t.cat === 'av' ? 'MultimediaApplication' : 'UtilitiesApplication', operatingSystem: 'Any (web browser)', browserRequirements: 'Requires JavaScript', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@context': 'https://schema.org', '@type': 'WebApplication', name: `${t.name} – ${NAME}`, url: `${SITE}${L.prefix}/${t.slug}/`, inLanguage: L.lang, description: t.desc, applicationCategory: t.cat === 'image' ? 'MultimediaApplication' : t.cat === 'av' ? 'MultimediaApplication' : 'UtilitiesApplication', operatingSystem: 'Any (web browser)', browserRequirements: 'Requires JavaScript', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
     faqSchema(t.faq),
-    crumbs([['Home', '/'], [cat.name, `/#${cat.id}`], [t.name, `/${t.slug}/`]]),
+    crumbs([[L.home, `${L.prefix}/`], [catName(L, cat), `${L.prefix}/#${cat.id}`], [t.name, `${L.prefix}/${t.slug}/`]]),
   ];
-  return layout({ title: t.title, desc: t.desc, pathname: `/${t.slug}/`, body, schema });
+  const alts = { en: toolPath(EN, en), es: toolPath(ES, en) };
+  return layout({ title: t.title, desc: t.desc, pathname: `${L.prefix}/${t.slug}/`, body, schema, L, alts });
 }
 
-function homePage() {
-  const homeFaq = [
+function homePage(L = EN) {
+  const S = L === ES ? ES : null;
+  const list = toolsIn(L);
+  const homeFaq = S ? S.homeFaq(NAME) : [
     ['Are these tools really free?', `Yes. Every tool on ${NAME} is free with no sign-up, no watermark and no daily limit. The site is supported by ads.`],
     ['Are my files uploaded?', 'No. Every tool runs inside your browser on your own device. Your files are never sent to a server.'],
     ['Do the tools work on phones?', 'Yes. They work in modern browsers on iPhone, Android, Windows, Mac and Chromebook.'],
     ['Can I download YouTube videos here?', 'No. These tools work with files you already have on your device.'],
   ];
+  const why = S ? S.why : [
+    ['Private:', 'files are processed on your device and never uploaded.'],
+    ['Fast:', 'no upload or download wait, even for big batches of photos.'],
+    ['Free:', 'no account, no watermark and no limits on how often you use it.'],
+    ['Works anywhere:', 'phone, tablet or computer, in any modern browser.'],
+  ];
   const body = `
 <div class="hero">
-<h1>Free file tools that run in your browser</h1>
-<p class="lead">Compress and convert images, pull audio from video, and merge or split PDFs. No upload, no sign-up, no watermark.</p>
-<div class="promise"><span class="lock">🔒</span><div><b>Your files never leave your device.</b><span>Every tool works right here in your browser. Nothing is uploaded, so your photos, videos and documents stay private, and big files are done in seconds.</span></div></div>
-<div class="search"><input id="q" type="search" placeholder="Search ${tools.length} tools: try “mp4 to mp3” or “100 kb”" aria-label="Search tools" autocomplete="off"><p id="qnone" hidden>No tool matches that yet. Try another word, like “compress” or “pdf”.</p></div>
+<h1>${S ? S.homeH1 : 'Free file tools that run in your browser'}</h1>
+<p class="lead">${S ? S.homeLead : 'Compress and convert images, pull audio from video, and merge or split PDFs. No upload, no sign-up, no watermark.'}</p>
+<div class="promise"><span class="lock">🔒</span><div><b>${S ? S.promiseB : 'Your files never leave your device.'}</b><span>${S ? S.promiseP : 'Every tool works right here in your browser. Nothing is uploaded, so your photos, videos and documents stay private, and big files are done in seconds.'}</span></div></div>
+<div class="search"><input id="q" type="search" placeholder="${esc(S ? S.searchPh(list.length) : `Search ${list.length} tools: try “mp4 to mp3” or “100 kb”`)}" aria-label="Search" autocomplete="off"><p id="qnone" hidden>${S ? S.searchNone : 'No tool matches that yet. Try another word, like “compress” or “pdf”.'}</p></div>
 </div>
-${categories.map((c) => `<section class="cat"><h2 id="${c.id}">${esc(c.name)}</h2>\n<div class="grid">${tools.filter((t) => t.cat === c.id).map(tile).join('')}</div></section>`).join('\n')}
+${categories.map((c) => `<section class="cat"><h2 id="${c.id}">${esc(catName(L, c))}</h2>\n<div class="grid">${list.filter((t) => t.cat === c.id).map((t) => tile(t, L)).join('')}</div></section>`).join('\n')}
 ${adSlot('top')}
 <div class="prose">
-<h2>Why use ${esc(NAME)}?</h2>
+<h2>${S ? S.whyH(NAME) : `Why use ${esc(NAME)}?`}</h2>
 <ul>
-<li><b>Private:</b> files are processed on your device and never uploaded.</li>
-<li><b>Fast:</b> no upload or download wait, even for big batches of photos.</li>
-<li><b>Free:</b> no account, no watermark and no limits on how often you use it.</li>
-<li><b>Works anywhere:</b> phone, tablet or computer, in any modern browser.</li>
+${why.map(([b, t]) => `<li><b>${b}</b> ${t}</li>`).join('\n')}
 </ul>
-<h2>Questions</h2>
+<h2>${S ? S.questions : 'Questions'}</h2>
 ${faqHtml(homeFaq)}
 </div>
 `;
   const schema = [
-    { '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, url: SITE + '/', description: cfg.tagline },
-    { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: tools.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.name, url: `${SITE}/${t.slug}/` })) },
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: NAME, url: `${SITE}${L.prefix}/`, inLanguage: L.lang, description: S ? S.homeDesc : cfg.tagline },
+    { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.name, url: `${SITE}${L.prefix}/${t.slug}/` })) },
     faqSchema(homeFaq),
   ];
-  return layout({ title: `${NAME} – Free File Converter & Compressor, No Upload`, desc: 'Free online tools to compress JPEG, convert images, convert MP4 to MP3, compress video and merge or split PDF. Private: files never leave your device.', pathname: '/', body, schema });
+  return layout({ title: S ? S.homeTitle(NAME) : `${NAME} – Free File Converter & Compressor, No Upload`, desc: S ? S.homeDesc : 'Free online tools to compress JPEG, convert images, convert MP4 to MP3, compress video and merge or split PDF. Private: files never leave your device.', pathname: `${L.prefix}/`, body, schema, L, alts: { en: '/', es: '/es/' } });
 }
 
 const contactLine = cfg.contactEmail
@@ -217,15 +244,21 @@ copy('vendor', 'vendor');
 copy('src/static', '.');
 write('index.html', homePage());
 for (const t of tools) write(`${t.slug}/index.html`, toolPage(t));
+write('es/index.html', homePage(ES));
+for (const t of toolsIn(ES)) write(`es/${t.slug}/index.html`, toolPage(t, ES));
 for (const [slug, [name, title, desc, body]] of Object.entries(pages)) {
   write(`${slug}/index.html`, layout({ title, desc, pathname: `/${slug}/`, body: `<p class="crumbs"><a href="/">Home</a> › ${esc(name)}</p><div class="prose">${body}</div>` }));
 }
 write('404.html', layout({ title: `Page not found – ${NAME}`, desc: 'Page not found.', pathname: '/404/', noindex: true, body: `<h1>Page not found</h1><p class="lead">That page doesn’t exist. Pick a tool below.</p><div class="grid">${tools.slice(0, 12).map(tile).join('')}</div>` }));
 
 const urls = ['/', ...tools.map((t) => `/${t.slug}/`), ...Object.keys(pages).map((p) => `/${p}/`)];
-write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}\n</urlset>\n`);
+const pairs = [['/', '/es/'], ...tools.map((t) => [toolPath(EN, t.slug), toolPath(ES, t.slug)])];
+const alt = ([en, sp]) => `<xhtml:link rel="alternate" hreflang="en" href="${SITE}${en}"/><xhtml:link rel="alternate" hreflang="es" href="${SITE}${sp}"/><xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${en}"/>`;
+const altFor = Object.fromEntries(pairs.flatMap((p) => [[p[0], alt(p)], [p[1], alt(p)]]));
+const allUrls = [...urls, ...pairs.map((p) => p[1])];
+write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${allUrls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod>${altFor[u] || ''}</url>`).join('\n')}\n</urlset>\n`);
 write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 if (adsOn) write('ads.txt', `google.com, ${cfg.adsenseClient.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`);
 write('manifest.webmanifest', JSON.stringify({ name: `${NAME}: free file tools`, short_name: NAME, description: cfg.tagline, start_url: '/?source=app', scope: '/', display: 'standalone', background_color: '#f7f8fa', theme_color: '#1f6feb', icons: [{ src: '/favicon.png', sizes: '192x192', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }, { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }], shortcuts: ['compress-jpeg', 'mp4-to-mp3', 'merge-pdf', 'compress-image-to-100kb'].map((s) => ({ name: bySlug[s].name, url: `/${s}/` })) }, null, 1));
 write('favicon.svg', LOGO.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" '));
-console.log(`Built ${urls.length} pages into public/ for ${SITE}`);
+console.log(`Built ${allUrls.length} pages into public/ for ${SITE}`);
