@@ -109,6 +109,16 @@ const faqHtml = (faq) => faq.map(([q, a]) => `<details><summary>${esc(q)}</summa
 const faqSchema = (faq) => ({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
 const crumbs = (items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: SITE + p })) });
 
+// "How to" heading: lower-case the first letter only for a normal word (not AAC, not German nouns).
+// Tools named with a noun (e.g. "Image compressor") carry an English howTo verb phrase; other languages show the label alone for them.
+const lcFirst = (s) => (s.length > 1 && s[1] !== s[1].toUpperCase() ? s[0].toLowerCase() + s.slice(1) : s);
+function howToHeading(t, L, en) {
+  const base = tools.find((x) => x.slug === en) || t;
+  if (L === EN) return 'How to ' + esc(base.howTo || lcFirst(t.h1));
+  if (base.howTo) return L.howTo;
+  return L.howTo + ': ' + esc(L.lang === 'de' ? t.h1 : lcFirst(t.h1));
+}
+
 function toolPage(t, L = EN) {
   const en = t.en || t.slug;
   const cat = categories.find((c) => c.id === t.cat);
@@ -124,7 +134,7 @@ function toolPage(t, L = EN) {
 <section class="tool" id="tool" ${data}><noscript>${S ? S.noscript : 'This tool needs JavaScript turned on.'}</noscript></section>
 ${adSlot('top')}
 <div class="prose">
-<h2>${S ? S.howTo + ': ' + esc(t.h1.charAt(0).toLowerCase() + t.h1.slice(1)) : 'How to ' + esc(t.h1.charAt(0).toLowerCase() + t.h1.slice(1))}</h2>
+<h2>${howToHeading(t, L, en)}</h2>
 <ol class="steps">${t.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
 <p>${esc(t.intro)}</p>
 <h2>${S ? S.freeH : 'Free, private and no sign-up'}</h2>
