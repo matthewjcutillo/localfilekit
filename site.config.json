@@ -4,6 +4,31 @@
   "tagline": "Free file tools that run in your browser. No upload.",
   "contactEmail": "",
   "adsenseClient": "pub-5918388593918236",
-  "adSlots": { "top": "", "bottom": "" },
-  "googleSiteVerification": ""
+  "adSlots": {
+    "top": "",
+    "bottom": ""
+  },
+  "googleSiteVerification": "",
+  "findUs": [
+    {
+      "name": "Uneed",
+      "url": "https://www.uneed.best/tool/localfilekit"
+    },
+    {
+      "name": "DEV",
+      "url": "https://dev.to/mattcutillo"
+    },
+    {
+      "name": "Hashnode",
+      "url": "https://hashnode.com/@mattcutillo"
+    },
+    {
+      "name": "Peerlist",
+      "url": "https://peerlist.io/mattcutillo"
+    },
+    {
+      "name": "SideProjectors",
+      "url": "https://www.sideprojectors.com/user/profile/292667"
+    }
+  ]
 }

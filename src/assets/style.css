@@ -93,3 +93,4 @@ details.langs summary{cursor:pointer;color:var(--muted);list-style:none;font-wei
 details.langs summary::-webkit-details-marker{display:none}
 details.langs div{position:absolute;right:0;top:1.6em;z-index:20;background:var(--card,#fff);border:1px solid var(--line,#ddd);border-radius:8px;padding:6px 0;min-width:140px;box-shadow:0 6px 20px rgba(0,0,0,.12)}
 details.langs div a{display:block;padding:6px 14px;white-space:nowrap}
+footer.site .findus{margin:0 0 8px}
