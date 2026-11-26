@@ -34,5 +34,12 @@
       "name": "Fazier",
       "url": "https://fazier.com"
     }
+  ],
+  "badges": [
+    {
+      "href": "https://startupbase.io/products/localfilekit",
+      "img": "https://statics.startupbase.io/site/badges/launched-on-sb.svg",
+      "alt": "Launched on StartupBase"
+    }
   ]
 }

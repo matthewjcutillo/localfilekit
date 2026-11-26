@@ -28,6 +28,7 @@ const MODS = [es, pt, de, ru, el, hu, ka];
 // "Find us on" footer row. Links live in site.config.json (findUs) so new listings are one line to add.
 const FIND_US_LABEL = { en: 'Find us on', es: 'Encuéntranos en', pt: 'Encontre-nos em', de: 'Finde uns auf', ru: 'Мы на', el: 'Βρείτε μας στο', hu: 'Megtalálsz minket itt', ka: 'გვიპოვეთ' };
 const findUs = (L) => (cfg.findUs || []).length ? `<p class="findus">${FIND_US_LABEL[L.lang] || FIND_US_LABEL.en}: ${cfg.findUs.map((f) => `<a href="${esc(f.url)}" rel="noopener" target="_blank">${esc(f.name)}</a>`).join(' · ')}</p>` : '';
+const badges = () => (cfg.badges || []).length ? `<p class="badges">${cfg.badges.map((b) => `<a href="${esc(b.href)}" target="_blank" rel="noopener noreferrer"><img src="${esc(b.img)}" alt="${esc(b.alt)}" height="44" style="height:44px;width:auto" loading="lazy"></a>`).join(' ')}</p>` : '';
 const OTHER = MODS.map((m) => m.ui);
 const LANGS = [EN, ...OTHER];
 const BY = new Map([[EN, bySlug], ...MODS.map((m) => [m.ui, Object.fromEntries(tools.map((t) => [t.slug, { ...t, ...m.translateTool(t), en: t.slug }]))])]);
@@ -96,6 +97,7 @@ ${body}
 <footer class="site"><div class="wrap">
 <nav aria-label="Site"><a href="/about/">${L.footNav.about}</a><a href="/privacy/">${L.footNav.privacy}</a><a href="/terms/">${L.footNav.terms}</a><a href="/contact/">${L.footNav.contact}</a></nav>
 ${findUs(L)}
+${badges()}
 <div>© ${YEAR} ${esc(NAME)}. ${L.footer}</div>
 </div></footer>
 ${t9n}<script type="module" src="/assets/js/main.js"></script>
